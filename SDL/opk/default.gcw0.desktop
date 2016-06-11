@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Temper
+Comment=PC-Engine emulator
+Exec=temper
+Icon=icon
+Terminal=false
+Categories=emulators;
