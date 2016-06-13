@@ -96,7 +96,7 @@ u32 joy_hat_map(u32 hat_value)
 
 u32 update_input(event_input_struct *event_input)
 {
-	Uint8 *keystate = SDL_GetKeyState(NULL);
+  Uint8 *keystate = SDL_GetKeyState(NULL);
   SDL_Event event;
 
   event_input->config_button_action = CONFIG_BUTTON_NONE;
@@ -109,15 +109,11 @@ u32 update_input(event_input_struct *event_input)
 		if (keystate[SDLK_LCTRL])
 		{
 			event_input->action_type = INPUT_ACTION_TYPE_PRESS;
-			event_input->key_action = KEY_ACTION_QUIT;
-		}
-		if (keystate[SDLK_LSHIFT])
-		{
-			event_input->action_type = INPUT_ACTION_TYPE_PRESS;
 			event_input->config_button_action = CONFIG_BUTTON_MENU;
 		}
 	}
 	
+  
   if(SDL_PollEvent(&event))
   {
     switch(event.type)
@@ -133,9 +129,9 @@ u32 update_input(event_input_struct *event_input)
 
         switch(event.key.keysym.sym)
         {
-          /*case SDLK_ESCAPE:
-            event_input->key_action = KEY_ACTION_QUIT;
-            break;*/
+          case SDLK_ESCAPE:
+            //event_input->key_action = KEY_ACTION_QUIT;
+            break;
 
           case SDLK_1:
             event_input->key_action = KEY_ACTION_BG_OFF;
