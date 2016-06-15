@@ -84,13 +84,13 @@ void initialize_audio()
   }
 
   audio.pause_state = 1;
-  audio.playback_buffer_size = 8192;
+  audio.playback_buffer_size = 2048;
   //audio.playback_buffer_size = 4096;
   //audio.playback_buffer_size = 16384;
 
   SDL_AudioSpec desired_spec =
   {
-    config.audio_output_frequency, AUDIO_S16, 2, 0,
+    config.audio_output_frequency, AUDIO_S16SYS, 2, 0,
     audio.playback_buffer_size / 4, 0, 0, audio_callback, NULL
   };
 

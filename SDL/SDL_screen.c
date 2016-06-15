@@ -10,112 +10,6 @@ SDL_Surface *real_screen = NULL;
 u32 last_scale_factor;
 u8 *real_screen_pixels;
 
-#define plot_pixel_2x(offset)                                                 \
-  dest_pixels[offset] = current_pixel;                                        \
-  dest_pixels[offset + 1] = current_pixel                                     \
-
-#define plot_pixel_3x(offset)                                                 \
-  plot_pixel_2x(offset);                                                      \
-  dest_pixels[offset + 2] = current_pixel                                     \
-
-#define plot_pixel_4x(offset)                                                 \
-  plot_pixel_3x(offset);                                                      \
-  dest_pixels[offset + 3] = current_pixel                                     \
-
-void copy_screen_scale(SDL_Surface *dest, SDL_Surface *src, u32 scale_factor)
-{
-  u32 src_pitch = src->pitch / 2;
-  u16 *src_pixels = src->pixels;
-  u32 dest_pitch = dest->pitch / 2;
-  u16 *dest_pixels = dest->pixels;
-  u32 src_skip = src_pitch - src->w;
-  u32 dest_skip;
-  u32 src_width = src->w;
-  u32 src_height = src->h;
-
-  u32 current_pixel;
-  u32 i, i2;
-
-  if((src->w * scale_factor) < dest->w)
-    dest_pixels += (dest->w - (src->w * scale_factor)) / 2;
-
-  if((src->h * scale_factor) < dest->h)
-    dest_pixels += ((dest->h - (src->w * scale_factor)) / 2) * dest_pitch;
-
-  switch(scale_factor)
-  {
-    case 2:
-      dest_skip = (dest_pitch - (src_width * 2)) + dest_pitch;
-
-      for(i = 0; i < src_height; i++)
-      {
-        for(i2 = 0; i2 < src_width; i2++)
-        {
-          current_pixel = *src_pixels;
-          plot_pixel_2x(0);
-          plot_pixel_2x(dest_pitch);
-
-          src_pixels++;
-          dest_pixels += 2;
-        }
-        src_pixels += src_skip;
-        dest_pixels += dest_skip;
-      }
-      break;
-
-    case 3:
-    {
-      u32 dest_pitch2 = dest_pitch * 2;
-
-      dest_skip = (dest_pitch - (src_width * 3)) + dest_pitch2;
-
-      for(i = 0; i < src_height; i++)
-      {
-        for(i2 = 0; i2 < src_width; i2++)
-        {
-          current_pixel = *src_pixels;
-          plot_pixel_3x(0);
-          plot_pixel_3x(dest_pitch);
-          plot_pixel_3x(dest_pitch2);
-
-          src_pixels++;
-          dest_pixels += 3;
-        }
-        src_pixels += src_skip;
-        dest_pixels += dest_skip;
-      }
-      break;
-    }
-
-
-    case 4:
-    {
-      u32 dest_pitch2 = dest_pitch * 2;
-      u32 dest_pitch3 = dest_pitch * 3;
-
-      dest_skip = (dest_pitch - (src_width * 4)) + dest_pitch3;
-
-      for(i = 0; i < src_height; i++)
-      {
-        for(i2 = 0; i2 < src_width; i2++)
-        {
-          current_pixel = *src_pixels;
-          plot_pixel_4x(0);
-          plot_pixel_4x(dest_pitch);
-          plot_pixel_4x(dest_pitch2);
-          plot_pixel_4x(dest_pitch3);
-
-          src_pixels++;
-          dest_pixels += 4;
-        }
-        src_pixels += src_skip;
-        dest_pixels += dest_skip;
-      }
-      break;
-    }
-  }
-}
-
 #ifdef SDL_OPENGL_BLIT
 
 GLuint pixel_buffer_objects[2];
@@ -178,16 +72,7 @@ void update_screen()
   else
 #endif
   {
-    if((config.scale_factor == SCALE_1x) ||
-     (config.scale_factor == SCALE_FULLSCREEN))
-    {
-      SDL_Flip(screen);
-    }
-    else
-    {
-      copy_screen_scale(real_screen, screen, config.scale_factor);
-      SDL_Flip(real_screen);
-    }
+	SDL_Flip(screen);
   }
 }
 
@@ -246,7 +131,11 @@ void set_screen_resolution(u32 width, u32 height)
     switch(config.scale_factor)
     {
       case SCALE_FULLSCREEN:
-        screen = SDL_SetVideoMode(width, height, 16, SDL_FULLSCREEN);
+        screen = SDL_SetVideoMode(width, height, 16, SDL_FULLSCREEN
+#ifdef SDL_TRIPLEBUF
+         | SDL_HWSURFACE | SDL_TRIPLEBUF
+#endif
+         );
         real_screen_pixels = screen->pixels;
 
         if(old_pixels != NULL)
@@ -254,28 +143,16 @@ void set_screen_resolution(u32 width, u32 height)
 
         break;
 
-      case SCALE_1x:
-        screen = SDL_SetVideoMode(width, height, 16, 0);
+      default:
+        screen = SDL_SetVideoMode(width, height, 16, 
+#ifdef SDL_TRIPLEBUF
+		SDL_HWSURFACE | SDL_TRIPLEBUF
+#endif
+		);
   
         if(old_pixels != NULL)
           blit_screen(old_pixels);
-        break;
-
-      default:
-        screen = SDL_CreateRGBSurface(0, width, height, 16, 0, 0, 0, 0);
-
-        if(real_screen != NULL)
-          SDL_FreeSurface(real_screen);
-
-        real_screen = SDL_SetVideoMode(width * config.scale_factor,
-         height * config.scale_factor, 16, 0);
-
-        if(old_pixels != NULL)
-        {
-          blit_screen(old_pixels);
-          copy_screen_scale(real_screen, screen, config.scale_factor);
-        }
-        break;
+	break;
     }
 
     if(old_pixels != NULL)
@@ -283,6 +160,7 @@ void set_screen_resolution(u32 width, u32 height)
 
     last_scale_factor = config.scale_factor;
   }
+
 
   SDL_WM_SetCaption("Temper PC-Engine Emulator", "Temper");
 }

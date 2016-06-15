@@ -104,16 +104,6 @@ u32 update_input(event_input_struct *event_input)
   event_input->key_letter = 0;
   event_input->hat_status = HAT_STATUS_NONE;
   
-	if (keystate[SDLK_ESCAPE])
-	{
-		if (keystate[SDLK_LCTRL])
-		{
-			event_input->action_type = INPUT_ACTION_TYPE_PRESS;
-			event_input->config_button_action = CONFIG_BUTTON_MENU;
-		}
-	}
-	
-  
   if(SDL_PollEvent(&event))
   {
     switch(event.type)
@@ -130,6 +120,7 @@ u32 update_input(event_input_struct *event_input)
         switch(event.key.keysym.sym)
         {
           case SDLK_ESCAPE:
+			event_input->config_button_action = CONFIG_BUTTON_MENU;
             //event_input->key_action = KEY_ACTION_QUIT;
             break;
 
@@ -228,7 +219,7 @@ void clear_gui_actions()
 
 gui_action_type joy_map_gui_action(u32 button)
 {
-  switch(button)
+  /*switch(button)
   {
     case 1:
       return CURSOR_EXIT;
@@ -244,14 +235,13 @@ gui_action_type joy_map_gui_action(u32 button)
 
     case 5:
       return CURSOR_PAGE_DOWN;
-  }
-
+  }*/
   return CURSOR_NONE;
 }
 
 gui_action_type joy_hat_map_gui_action(u32 hat_value)
 {
-  switch(hat_value)
+  /*switch(hat_value)
   {
     case SDL_HAT_UP:
       return CURSOR_UP;
@@ -268,8 +258,7 @@ gui_action_type joy_hat_map_gui_action(u32 hat_value)
     case SDL_HAT_CENTERED:
       clear_gui_actions();
       break;
-  }
-
+  }*/
   return CURSOR_NONE;
 }
 
@@ -292,18 +281,18 @@ gui_action_type key_map_gui_action(u32 key)
     case SDLK_RIGHT:
       return CURSOR_RIGHT;
 
-    case SDLK_SPACE:
     case SDLK_RETURN:
+    case SDLK_LCTRL:
       return CURSOR_SELECT;
 
-    case SDLK_BACKSPACE:
+    case SDLK_LALT:
       return CURSOR_BACK;
 
-    case SDLK_PAGEUP:
+    /*case SDLK_PAGEUP:
       return CURSOR_PAGE_UP;
 
     case SDLK_PAGEDOWN:
-      return CURSOR_PAGE_DOWN;
+      return CURSOR_PAGE_DOWN;*/
   }
 
   return CURSOR_NONE;
@@ -311,7 +300,7 @@ gui_action_type key_map_gui_action(u32 key)
 
 u32 joy_axis_map_set_gui_action(u32 axis, s32 value)
 {
-  if(axis & 1)
+  /*if(axis & 1)
   {
     if(value < 0) 
       return CURSOR_UP;
@@ -324,7 +313,7 @@ u32 joy_axis_map_set_gui_action(u32 axis, s32 value)
       return CURSOR_LEFT;
     else
       return CURSOR_RIGHT;
-  }
+  }*/
 }
 
 void get_gui_input(gui_input_struct *gui_input)
@@ -336,7 +325,7 @@ void get_gui_input(gui_input_struct *gui_input)
   static button_repeat_state_type button_repeat_state = BUTTON_NOT_HELD;
   static gui_action_type cursor_repeat = CURSOR_NONE;
 
-  delay_us(10000);
+  delay_us(100);
 
   while(SDL_PollEvent(&event))
   {
@@ -429,10 +418,7 @@ void get_gui_input(gui_input_struct *gui_input)
 void initialize_event()
 {
   u32 joystick_count = SDL_NumJoysticks();
-
   printf("%d joysticks\n", joystick_count);
-  SDL_EnableUNICODE(1);
-
   if(joystick_count > 0)
   {
     SDL_JoystickOpen(0);

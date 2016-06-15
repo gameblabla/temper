@@ -75,7 +75,7 @@ void synchronize()
 
 void platform_initialize()
 {
-  SDL_Init(SDL_INIT_NOPARACHUTE | SDL_INIT);
+  SDL_Init(SDL_INIT);
   SDL_ShowCursor(0);
 }
 

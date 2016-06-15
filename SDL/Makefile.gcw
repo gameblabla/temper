@@ -2,20 +2,20 @@
 # Gilead Kutnick - Exophase
 
 # Global definitions
-
+AS        = mipsel-linux-as
 CC        = mipsel-linux-gcc
 STRIP     = mipsel-linux-strip
 
 OBJS      = main.o cpu.o memory.o irq.o io.o video.o timer.o psg.o disasm.o    \
             screen.o event.o audio.o menu.o debug.o cd.o adpcm.o netplay.o     \
-            arcade_card.o bin_cue.o                                            \
-            SDL_main.o SDL_screen.o SDL_audio.o SDL_event.o SDL_menu.o  
+            arcade_card.o bin_cue.o                                         \
+            SDL_main.o SDL_screen.o SDL_event.o SDL_menu.o SDL_audio.o cpu_mips_compatible.o
 BIN       ?= temper 
 
-# Platform specific definitions 
+# Platform specific definitions
 
-VPATH      += .. ../SDL
-CFLAGS     += -DGCW_BUILD -O3 -mips32r2 -Wall
+VPATH      += .. ../SDL ../linux ../psp
+CFLAGS     += -DGCW_BUILD -Ofast -mips32r2
 INCLUDES   = 
 LIBS       = -lSDL -lz -lm
 
@@ -31,7 +31,8 @@ LIBS       = -lSDL -lz -lm
 
 all:	${OBJS}
 	${CC} ${OBJS} ${LIBS} -o ${BIN}  
+	mv temper ./opk/temper
+	sh pack.sh
 
 clean:
 	rm -f *.o ${BIN} 
-
