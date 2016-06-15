@@ -9,7 +9,7 @@ STRIP     = mipsel-linux-strip
 OBJS      = main.o cpu.o memory.o irq.o io.o video.o timer.o psg.o disasm.o    \
             screen.o event.o audio.o menu.o debug.o cd.o adpcm.o netplay.o     \
             arcade_card.o bin_cue.o                                         \
-            SDL_main.o SDL_screen.o SDL_event.o SDL_menu.o SDL_audio.o cpu_mips_compatible.o
+            SDL_main.o SDL_screen.o SDL_event.o SDL_menu.o SDL_audio.o cpu_mips_compatible.o crc32.o
 BIN       ?= temper 
 
 # Platform specific definitions
@@ -17,7 +17,7 @@ BIN       ?= temper
 VPATH      += .. ../SDL ../linux ../psp
 CFLAGS     += -DGCW_BUILD -Ofast -mips32r2
 INCLUDES   = 
-LIBS       = -lSDL -lz -lm
+LIBS       = -lSDL -lz -lm -lvorbis -lvorbisfile -lbz2 -flto -Wl,--as-needed
 
 # Compilation:
 

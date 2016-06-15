@@ -147,6 +147,8 @@ void set_screen_resolution(u32 width, u32 height)
         screen = SDL_SetVideoMode(width, height, 16, 
 #ifdef SDL_TRIPLEBUF
 		SDL_HWSURFACE | SDL_TRIPLEBUF
+#else
+	0
 #endif
 		);
   

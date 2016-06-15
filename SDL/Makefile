@@ -10,7 +10,7 @@ PREFIX    = /usr
 OBJS      = main.o cpu.o memory.o irq.o io.o video.o timer.o psg.o disasm.o    \
             screen.o event.o audio.o menu.o debug.o cd.o adpcm.o netplay.o     \
             arcade_card.o bin_cue.o                                            \
-            SDL_main.o SDL_screen.o linux_audio.o SDL_event.o SDL_menu.o  
+            SDL_main.o SDL_screen.o linux_audio.o SDL_event.o SDL_menu.o crc32.o
 BIN       ?= temper 
 
 # Platform specific definitions 
@@ -32,7 +32,6 @@ LIBS       = -L${PREFIX}/lib `sdl-config --libs` -lz -lm -pthread
 
 all:	${OBJS}
 	${CC} ${OBJS} ${LIBS} -o ${BIN}  
-	${STRIP} ${BIN}
 
 clean:
 	rm -f *.o ${BIN} 
