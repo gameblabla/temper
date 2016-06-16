@@ -108,7 +108,7 @@ void initialize_audio()
   u32 channels = 2;
   u32 format = AFMT_S16_LE;
   // Use 4 1024 b  sample fragments.
-  u32 fragment_setting = (4 << 16) | DSP_AUDIO_BUFFER_BITS;
+  u32 fragment_setting = (2 << 16) | DSP_AUDIO_BUFFER_BITS;
   //u32 fragment_setting = (8 << 16) | DSP_AUDIO_BUFFER_BITS;
   u32 flags;
 
@@ -170,9 +170,12 @@ void audio_unlock()
   pthread_mutex_unlock(&audio_mutex);
 }
 
-void audio_pause()
+u32 audio_pause()
 {
-  audio_paused = 1;
+  u32 current_audio_pause = audio.pause_state;
+
+  audio.pause_state = 1;
+  return current_audio_pause;
 }
 
 void audio_unpause()

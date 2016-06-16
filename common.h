@@ -33,6 +33,10 @@ typedef signed long long int s64;
 
 #include "platform_defines.h"
 
+#ifdef CRC_CHECK
+#include "crc32.h"
+#endif
+
 #ifdef SDL_INIT
   #include <SDL.h>
 #endif
@@ -45,7 +49,7 @@ typedef signed long long int s64;
   #include "gp2x/gp2x_common.h"
 #endif
 
-#define TEMPER_VERSION "0.80"
+#define TEMPER_VERSION "1.22 GCW"
 #define CD_SWAP_OPTION
 #define FASTFORWARD_FRAMESKIP
 #define FASTFORWARD_FRAMESKIP_RATE 4

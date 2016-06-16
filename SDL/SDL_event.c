@@ -1,49 +1,78 @@
 #include "../common.h"
 #include "SDL_event.h"
 
+u32 sdl_to_config_map[] =
+{
+	SDLK_UP,
+	SDLK_DOWN,
+	SDLK_LEFT,
+	SDLK_RIGHT,
+	SDLK_LCTRL,
+	SDLK_LALT,
+	SDLK_LSHIFT,
+	SDLK_SPACE,
+	SDLK_TAB,
+	SDLK_BACKSPACE,
+	SDLK_RETURN,
+	SDLK_ESCAPE
+};
+
 u32 key_map(u32 keys)
 {
-  switch(keys)
-  {
-    case SDLK_UP:
-      return CONFIG_BUTTON_UP;
+	unsigned char i, chosen_key;
+	
+	chosen_key = 24;
 
-    case SDLK_DOWN:
-      return CONFIG_BUTTON_DOWN;
+	for (i=0;i<12;i++)
+	{
+		if (keys == sdl_to_config_map[i])
+		{
+			chosen_key = config.pad[i];
+			break;
+		}
+	}
 
-    case SDLK_LEFT:
-      return CONFIG_BUTTON_LEFT;
+	switch(chosen_key)
+	{
+		case 0:
+		  return CONFIG_BUTTON_UP;
 
-    case SDLK_RIGHT:
-      return CONFIG_BUTTON_RIGHT;
+		case 1:
+		  return CONFIG_BUTTON_DOWN;
 
-    case SDLK_LCTRL:
-      return CONFIG_BUTTON_I;
+		case 2:
+		  return CONFIG_BUTTON_LEFT;
 
-    case SDLK_LALT:
-      return CONFIG_BUTTON_II;
+		case 3:
+		  return CONFIG_BUTTON_RIGHT;
 
-    case SDLK_LSHIFT:
-      return CONFIG_BUTTON_III;
+		case 4:
+		  return CONFIG_BUTTON_I;
 
-    case SDLK_SPACE:
-      return CONFIG_BUTTON_IV;
+		case 5:
+		  return CONFIG_BUTTON_II;
 
-    case SDLK_TAB:
-      return CONFIG_BUTTON_V;
+		case 6:
+		  return CONFIG_BUTTON_III;
 
-    case SDLK_BACKSPACE:
-      return CONFIG_BUTTON_VI;
+		case 7:
+		  return CONFIG_BUTTON_IV;
 
-    case SDLK_RETURN:
-      return CONFIG_BUTTON_RUN;
+		case 8:
+		  return CONFIG_BUTTON_V;
 
-    case SDLK_ESCAPE:
-      return CONFIG_BUTTON_SELECT;
+		case 9:
+		  return CONFIG_BUTTON_VI;
 
-    default:
-      return CONFIG_BUTTON_NONE;
-  }
+		case 10:
+		  return CONFIG_BUTTON_RUN;
+
+		case 11:
+		  return CONFIG_BUTTON_SELECT;
+
+		default:
+		  return CONFIG_BUTTON_NONE;
+	}
 }
 
 u32 joy_button_map(u32 button)
@@ -86,7 +115,6 @@ u32 joy_hat_map(u32 hat_value)
 
 u32 update_input(event_input_struct *event_input)
 {
-  Uint8 *keystate = SDL_GetKeyState(NULL);
   SDL_Event event;
 
   event_input->config_button_action = CONFIG_BUTTON_NONE;
@@ -166,7 +194,6 @@ u32 update_input(event_input_struct *event_input)
             event_input->config_button_action = key_map(event.key.keysym.sym);
             break; 
      
-
           default:
             event_input->config_button_action = key_map(event.key.keysym.sym);
             break;

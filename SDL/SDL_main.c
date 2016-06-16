@@ -3,12 +3,21 @@
 
 void get_ticks_us(u64 *ticks_return)
 {
-  *ticks_return = (SDL_GetTicks() * 1000);
+	*ticks_return = (SDL_GetTicks() * 1000);
 }
 
 void delay_us(u32 delay)
 {
-  SDL_Delay(delay / 1000);
+	/*struct timespec req={0};
+	time_t sec=(unsigned short)(delay/1000);
+	delay=delay-(sec*1000);
+	req.tv_sec=sec;
+	req.tv_nsec=delay*1000000L;
+
+	while(nanosleep(&req,&req)==-1)
+	continue;*/
+	/*or*/
+	/*SDL_Delay(delay / 1000);*/
 }
 
 config_struct config =
@@ -16,10 +25,10 @@ config_struct config =
   // u32 pad[16];
   {
     CONFIG_BUTTON_UP, CONFIG_BUTTON_DOWN, CONFIG_BUTTON_LEFT,
-    CONFIG_BUTTON_RIGHT, CONFIG_BUTTON_NONE, CONFIG_BUTTON_II,
-    CONFIG_BUTTON_I, CONFIG_BUTTON_MENU, CONFIG_BUTTON_NONE,
+    CONFIG_BUTTON_RIGHT, CONFIG_BUTTON_I, CONFIG_BUTTON_II,
+    CONFIG_BUTTON_III, CONFIG_BUTTON_IV, CONFIG_BUTTON_V,
+    CONFIG_BUTTON_VI, CONFIG_BUTTON_RUN, CONFIG_BUTTON_SELECT,
     CONFIG_BUTTON_NONE, CONFIG_BUTTON_NONE, CONFIG_BUTTON_NONE,
-    CONFIG_BUTTON_SELECT, CONFIG_BUTTON_RUN, CONFIG_BUTTON_NONE,
     CONFIG_BUTTON_NONE
   },
   0,                 // u32 show_fps;

@@ -1,13 +1,21 @@
 #include "common.h"
 
 #ifdef ARM_ARCH
-
 memory_struct memory __attribute__ ((aligned(8192)));
-
 #else
-
 memory_struct memory;
+#endif
 
+#ifdef CRC_CHECK
+const u32 sgx_table[6] = 
+{
+	0xbebfe042,
+	0x4c2126b0,
+	0x8c4588e2,
+	0x1f041166,
+	0xb486a8ed,
+	0x3b13af61,
+};
 #endif
 
 char *get_mpr_region_name(u32 mpr_number)
@@ -1344,6 +1352,10 @@ s32 load_rom(char *path)
   u32 bz2_compressed = 0;
   char path_name[MAX_PATH];
   struct stat sb;
+  #ifdef CRC_CHECK
+  u32 crc32, result;
+  #endif
+  u8 i;
 
   if(config.rom_filename[0])
   {
@@ -1355,7 +1367,7 @@ s32 load_rom(char *path)
 
   config.cd_loaded = 0;
   config.sgx_mode = 0;
-
+  
   if(dot_ptr != NULL)
   {
     // bin eh? Bet you meant cue, didn't you.
@@ -1378,7 +1390,19 @@ s32 load_rom(char *path)
 
     if(!strcasecmp(dot_ptr + 1, "sgx"))
       config.sgx_mode = 1;
-
+      
+    #ifdef CRC_CHECK
+    result = Crc32_ComputeFile(rom_file, &crc32);
+    for (i=0;i<6;i++)
+    {
+		if (crc32 == sgx_table[i])
+		{
+			config.sgx_mode = 1;
+			break;
+		}
+	}  
+	#endif
+      
     if(!strcasecmp(dot_ptr + 1, "bz2"))
     {
       if((strlen(path) > 4) && (!strcasecmp(dot_ptr - 4, ".sgx.bz2")))
@@ -1623,7 +1647,6 @@ u32 load_mem_safe_16_f(u32 src)
   return value;
 }
 
-
 #define memory_savestate_extra_load()                                         \
 {                                                                             \
   u32 i;                                                                      \
@@ -1666,4 +1689,3 @@ void memory_##type_b##_savestate(savestate_##type_b##_type savestate_file)    \
 }                                                                             \
 
 build_savestate_functions(memory);
-

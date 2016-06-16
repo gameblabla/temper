@@ -1,2 +1,2 @@
 #define CPU_ARM_FAST_MODE
-#include "cpu_arm_asm.S"
+#include "cpu_mips_asm.S"

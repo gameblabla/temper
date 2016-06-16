@@ -5,13 +5,14 @@ void setup_main_dirs()
   struct stat sb;
 
 #ifdef LETSGO_HOME
-	char save_path[MAX_PATH], bram_path[MAX_PATH], config_path[MAX_PATH], images_path[MAX_PATH];
+	char save_path[MAX_PATH], bram_path[MAX_PATH], config_path[MAX_PATH], images_path[MAX_PATH], sys_path[MAX_PATH];
 	snprintf(config.main_path, MAX_PATH, "%s/.temper", getenv("HOME")); 
 	
 	snprintf(save_path, MAX_PATH, "%s/%s", config.main_path, "save_states"); 
 	snprintf(bram_path, MAX_PATH, "%s/%s", config.main_path, "bram"); 
 	snprintf(config_path, MAX_PATH, "%s/%s", config.main_path, "config"); 
 	snprintf(images_path, MAX_PATH, "%s/%s", config.main_path, "images"); 
+	snprintf(sys_path, MAX_PATH, "%s/%s", config.main_path, "syscards"); 
 	
 	make_directory(config.main_path);
 	
@@ -37,6 +38,12 @@ void setup_main_dirs()
 	{
 		printf("images directory doesn't exist, creating\n");
 		make_directory(images_path);
+	}
+	
+	if(stat(sys_path, &sb))
+	{
+		printf("syscard directory doesn't exist, creating\n");
+		make_directory(sys_path);
 	}
 #else
 	getcwd(config.main_path, MAX_PATH);
@@ -289,56 +296,6 @@ int main(int argc, char *argv[])
   printf("platform initialize now\n");
   platform_initialize();
 
-  // These are offsets needed by ARM ASM files. Uncomment this if they
-  // need to be updated.
-
-/*  printf("vdc.screen_width: %x\n", (u32)(&vdc.screen_width) - (u32)(&vdc));
-  printf("vdc.status: %x\n", (u32)(&vdc.status) - (u32)(&vdc));
-  printf("vdc.cr: %x\n", (u32)(&vdc.cr) - (u32)(&vdc));
-  printf("vdc.mwr: %x\n", (u32)(&vdc.mwr) - (u32)(&vdc));
-  printf("vdc.bxr: %x\n", (u32)(&vdc.bxr) - (u32)(&vdc));
-  printf("vdc.effective_byr: %x\n", (u32)(&vdc.effective_byr) - (u32)(&vdc));
-  printf("vdc.tile_cache: %x\n", (u32)(&vdc.tile_cache) - (u32)(&vdc));
-  printf("vdc.pattern_cache: %x\n", (u32)(&vdc.pattern_cache) - (u32)(&vdc));
-  printf("vdc.vram: %x\n", (u32)(&vdc.vram) - (u32)(&vdc));
-  printf("vdc.dirty_tiles: %x\n", (u32)(&vdc.dirty_tiles) - (u32)(&vdc));
-  printf("vdc.dirty_patterns: %x\n",
-   (u32)(&vdc.dirty_patterns) - (u32)(&vdc));
-  printf("vdc.overdraw_width_offset: %x\n",
-   (u32)(&vdc.overdraw_width_offset) - (u32)(&vdc)); */
-
-/*
-  printf("memory.mpr_translated: %x\n", (u32)(&memory.mpr_translated) -
-   (u32)(&memory));
-  printf("sizeof(sat_cache_line_entry_struct) = %x\n",
-   sizeof(sat_cache_line_entry_struct));
-  printf("sizeof(sat_cache_line_struct) = %x\n",
-   sizeof(sat_cache_line_struct));
-  printf("cd.work_ram = %p\n", cd.work_ram);
-  printf("memory.work_ram = %p\n", memory.work_ram);
-
-  printf("debug.mode: %x\n", (u32)(&debug.mode) - (u32)(&debug));
-  printf("debug.breakpoint: %x\n", (u32)(&debug.breakpoint) - (u32)(&debug));
-  printf("debug.instruction_count: %x\n", (u32)(&debug.instruction_count)
-   - (u32)(&debug));
-  printf("debug.breakpoint_original: %x\n", (u32)(&debug.breakpoint_original)
-   - (u32)(&debug));
-
-  printf("cpu.global_cycles: %x\n", (u32)(&cpu.global_cycles) - (u32)(&cpu));
-  printf("cpu.a: %x\n", (u32)(&cpu.a) - (u32)(&cpu));
-  printf("cpu.x: %x\n", (u32)(&cpu.x) - (u32)(&cpu));
-  printf("cpu.y: %x\n", (u32)(&cpu.y) - (u32)(&cpu));
-  printf("cpu.s: %x\n", (u32)(&cpu.s) - (u32)(&cpu));
-  printf("cpu.p: %x\n", (u32)(&cpu.p) - (u32)(&cpu));
-  printf("cpu.cpu_divider: %x\n", (u32)(&cpu.cpu_divider) - (u32)(&cpu));
-  printf("cpu.pc: %x\n", (u32)(&cpu.pc) - (u32)(&cpu));
-  printf("cpu.irq_raised: %x\n", (u32)(&cpu.irq_raised) - (u32)(&cpu));
-  printf("cpu.extra_cycles: %x\n", (u32)(&cpu.extra_cycles) - (u32)(&cpu));
-  printf("cpu.alert: %x\n", (u32)(&cpu.alert) - (u32)(&cpu));
-  printf("cpu.vdc_stalled: %x\n", (u32)(&cpu.vdc_stalled) - (u32)(&cpu));
-  printf("cpu.cycles_remaining: %x\n", (u32)(&cpu.cycles_remaining) - (u32)(&cpu));
-*/
-
   printf("sizeof(cpu_struct): %d\n", sizeof(cpu_struct));
 
   printf("Setting up main directories.\n");
@@ -411,7 +368,7 @@ int main(int argc, char *argv[])
       continue;
     }
 
-    synchronize();
+    /*synchronize();*/
 
 #ifdef FASTFORWARD_FRAMESKIP
     if(config.fast_forward && !config.benchmark_mode)

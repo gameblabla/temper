@@ -113,8 +113,8 @@
 #define COLOR_RGB_565
 
 #define LINUX_PLATFORM
-#define X86_ARCH
 #define LETSGO_HOME
+#define CRC_CHECK
 /*#define OGG_SUPPORT
 #define BZ_SUPPORT*/
 #define KEYBOARD_SUPPORT
@@ -171,13 +171,20 @@
 #define SDL_INIT        (SDL_INIT_VIDEO | SDL_INIT_JOYSTICK)
 
 #define COLOR_RGB_565
+#define CRC_CHECK
 
+#define MIPS_ARCH
 #define LINUX_PLATFORM
 #define LETSGO_HOME
-#define X86_ARCH
+#define KEYBOARD_SUPPORT
+
+#define OGG_SUPPORT
+#define OGG_TREMOR
+#define BZ_SUPPORT
+
 #define DIR_SEPARATOR_CHAR '/'
 #define DIR_SEPARATOR_CHAR_STR "/"
-#define MAX_PATH 1024
+#define MAX_PATH 512
 #define make_directory(name) mkdir(name, 0755)
 
 #endif

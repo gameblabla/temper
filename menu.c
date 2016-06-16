@@ -475,7 +475,7 @@ s32 load_file(char **wildcards, char *result, u16 *screen_bg)
   return return_value;
 }
 
-char *pce_ext[] = { ".pce", ".bz2", ".cue", ".sgx", NULL };
+char *pce_ext[] = { ".pce", ".bz2", ".cue", ".sgx", ".tns",  NULL };
 
 
 void modify_snapshot_bg(menu_state_struct *menu_state,
@@ -1262,7 +1262,7 @@ menu_option_multi_input_int_struct *create_multi_input_int(
 void draw_menu_main(menu_state_struct *menu_state, menu_struct *menu)
 {
   print_string_bg("Temper version " TEMPER_VERSION,
-   make_color16(0x1F, 0x3F, 0x1F), menu_state->current_bg, 88,
+   make_color16(0x1F, 0x3F, 0x1F), menu_state->current_bg, 70,
    menu_line(4), RESOLUTION_WIDTH);
 }
 
@@ -1679,7 +1679,7 @@ menu_struct *create_menu_pad(menu_state_struct *menu_state,
   for(i = 0; i < platform_control_count; i++)
   {
     add_menu_option(create_numeric_labeled(NULL, platform_control_names[i],
-     current_line_number, &(config.pad[i]), 0, platform_control_count,
+     current_line_number, &(config.pad[i]), 0, 24,
      button_strings));
   }
 
@@ -1927,5 +1927,14 @@ void menu(u32 start_file_dialog)
   free(menu_state.load_state_snapshot_bg);
   free(menu_state.screen_bg_quarter);
   free(menu_state.screen_bg);
+  
+   #ifdef SDL_TRIPLEBUF
+   unsigned char i;
+   for(i=0;i<3;i++)
+   {
+		clear_screen();
+		update_screen();
+   }
+   #endif
 }
 
