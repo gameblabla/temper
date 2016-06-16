@@ -17,37 +17,27 @@ u32 key_map(u32 keys)
     case SDLK_RIGHT:
       return CONFIG_BUTTON_RIGHT;
 
-    case SDLK_d:
-    //case SDLK_SPACE:
     case SDLK_LCTRL:
       return CONFIG_BUTTON_I;
 
-    case SDLK_s:
-    //case SDLK_LCTRL:
     case SDLK_LALT:
       return CONFIG_BUTTON_II;
 
-    case SDLK_a:
     case SDLK_LSHIFT:
       return CONFIG_BUTTON_III;
 
-    case SDLK_c:
-    /*case SDLK_LALT:*/
     case SDLK_SPACE:
       return CONFIG_BUTTON_IV;
 
-    case SDLK_x:
     case SDLK_TAB:
       return CONFIG_BUTTON_V;
 
-    case SDLK_z:
     case SDLK_BACKSPACE:
       return CONFIG_BUTTON_VI;
 
     case SDLK_RETURN:
       return CONFIG_BUTTON_RUN;
 
-    case SDLK_RSHIFT:
     case SDLK_ESCAPE:
       return CONFIG_BUTTON_SELECT;
 
@@ -158,6 +148,7 @@ u32 update_input(event_input_struct *event_input)
 
           case SDLK_BACKSPACE:
             event_input->key_action = KEY_ACTION_NETPLAY_TALK_CURSOR_BACKSPACE;
+            event_input->config_button_action = key_map(event.key.keysym.sym);
             break;
 
           case SDLK_RETURN:
