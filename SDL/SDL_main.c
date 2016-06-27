@@ -1,6 +1,19 @@
 #include "../common.h"
 #include "SDL_screen.h"
 
+static void msleep(unsigned char milisec)
+{
+	struct timespec req={0};
+	time_t sec=(unsigned short)(milisec/1000);
+
+	milisec=milisec-(sec*1000);
+	req.tv_sec=sec;
+	req.tv_nsec=milisec*1000000L;
+
+	while(nanosleep(&req,&req)==-1)
+	continue;
+}
+
 void get_ticks_us(u64 *ticks_return)
 {
 	*ticks_return = (SDL_GetTicks() * 1000);
@@ -8,16 +21,9 @@ void get_ticks_us(u64 *ticks_return)
 
 void delay_us(u32 delay)
 {
-	/*struct timespec req={0};
-	time_t sec=(unsigned short)(delay/1000);
-	delay=delay-(sec*1000);
-	req.tv_sec=sec;
-	req.tv_nsec=delay*1000000L;
 
-	while(nanosleep(&req,&req)==-1)
-	continue;*/
 	/*or*/
-	/*SDL_Delay(delay / 1000);*/
+	msleep(delay / 1000);
 }
 
 config_struct config =
@@ -94,5 +100,13 @@ void platform_quit()
   show_profile_stats();
 #endif
   SDL_Quit();
+}
+
+void set_gamma(u32 gamma)
+{
+	int error;
+	float gam = gamma;
+	gam = gam / 100;
+	error = SDL_SetGamma(gam, gam, gam);
 }
 

@@ -84,7 +84,8 @@ void initialize_audio()
   }
 
   audio.pause_state = 1;
-  audio.playback_buffer_size = 2048;
+  audio.playback_buffer_size = 4096;
+  //audio.playback_buffer_size = 2048;
   //audio.playback_buffer_size = 4096;
   //audio.playback_buffer_size = 16384;
 

@@ -133,7 +133,7 @@ void set_screen_resolution(u32 width, u32 height)
       case SCALE_FULLSCREEN:
         screen = SDL_SetVideoMode(width, height, 16, SDL_FULLSCREEN
 #ifdef SDL_TRIPLEBUF
-         | SDL_HWSURFACE | SDL_TRIPLEBUF
+        | SDL_HWSURFACE | SDL_TRIPLEBUF
 #endif
          );
         real_screen_pixels = screen->pixels;

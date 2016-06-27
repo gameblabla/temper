@@ -17,7 +17,7 @@ BIN       ?= temper
 VPATH      += .. ../SDL ../linux ../psp
 CFLAGS     += -DGCW_BUILD -Ofast -mips32r2
 INCLUDES   = 
-LIBS       = -lSDL -lz -lm -lvorbis -lvorbisfile -lbz2 -flto -Wl,--as-needed
+LIBS       = -lSDL -lz -lm -lvorbis -lvorbisfile -lbz2 -flto -Wl,--as-needed -pthread
 
 # Compilation:
 
