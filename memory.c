@@ -1371,7 +1371,7 @@ s32 load_rom(char *path)
   if(dot_ptr != NULL)
   {
     // bin eh? Bet you meant cue, didn't you.
-    if(!strcasecmp(dot_ptr + 1, "bin"))
+    if(strstr(path, ".bin") || strstr(path, ".iso"))
     {
       if((strlen(path) > 7) && (strcasecmp(dot_ptr - 7, "syscard.bin")))
       {
@@ -1380,7 +1380,7 @@ s32 load_rom(char *path)
       }
     }
 
-    if(!strcasecmp(dot_ptr + 1, "cue"))
+    if(strstr(path, ".cue"))
     {
       if(load_bin_cue(path) == -1)
         return -1;
@@ -1388,7 +1388,7 @@ s32 load_rom(char *path)
       config.cd_loaded = 1;
     }
 
-    if(!strcasecmp(dot_ptr + 1, "sgx"))
+    if(strstr(path, "sgx"))
       config.sgx_mode = 1;
       
     #ifdef CRC_CHECK
@@ -1403,9 +1403,9 @@ s32 load_rom(char *path)
 	}  
 	#endif
       
-    if(!strcasecmp(dot_ptr + 1, "bz2"))
+    if(strstr(path, ".bz2"))
     {
-      if((strlen(path) > 4) && (!strcasecmp(dot_ptr - 4, ".sgx.bz2")))
+      if((strlen(path) > 4) && (strstr(path, ".sgx.bz2")))
         config.sgx_mode = 1;
 
       bz2_compressed = 1;

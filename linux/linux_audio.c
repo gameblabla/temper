@@ -1,12 +1,7 @@
-#include "../common.h"
-
 #include <linux/soundcard.h>
 #include <sys/ioctl.h>
 #include <pthread.h>
-#include <fcntl.h>
-#include <strings.h>
-#include <sched.h>
-#include <unistd.h>
+#include "../common.h"
 
 u32 audio_dev;
 u32 audio_paused = 1;
@@ -86,8 +81,8 @@ void *audio_update_thread(void *thread_data)
   u32 length = DSP_AUDIO_BUFFER_SIZE * 4;
   s16 stream[DSP_AUDIO_BUFFER_SIZE * 2];
 
-  struct sched_param sched_param = { 99 };
-  pthread_setschedparam(audio_thread, SCHED_RR, &sched_param);
+  //struct sched_param sched_param = { 99 };
+  //pthread_setschedparam(audio_thread, SCHED_RR, &sched_param);
 
   while(!audio_exit_thread)
   {
@@ -108,8 +103,7 @@ void initialize_audio()
   u32 channels = 2;
   u32 format = AFMT_S16_LE;
   // Use 4 1024 b  sample fragments.
-  u32 fragment_setting = (2 << 16) | DSP_AUDIO_BUFFER_BITS;
-  //u32 fragment_setting = (8 << 16) | DSP_AUDIO_BUFFER_BITS;
+  u32 fragment_setting = (4 << 16) | DSP_AUDIO_BUFFER_BITS;
   u32 flags;
 
   audio.output_frequency = 44100;
@@ -159,6 +153,7 @@ void audio_wait_callback()
     }
   }
 }
+
 
 void audio_lock()
 {

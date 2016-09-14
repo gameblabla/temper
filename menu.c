@@ -199,7 +199,7 @@ s32 load_file(char **wildcards, char *result, u16 *screen_bg)
 
               for(i = 0; wildcards[i] != NULL; i++)
               {
-                if(!strcasecmp((file_name + ext_pos),
+                if(strstr((file_name + ext_pos),
                  wildcards[i]))
                 {
                   file_list[num_files] =
@@ -475,7 +475,7 @@ s32 load_file(char **wildcards, char *result, u16 *screen_bg)
   return return_value;
 }
 
-char *pce_ext[] = { ".pce", ".bz2", ".cue", ".sgx", ".tns",  NULL };
+char *pce_ext[] = { ".pce", ".bz2", ".cue", ".sgx", NULL };
 
 
 void modify_snapshot_bg(menu_state_struct *menu_state,

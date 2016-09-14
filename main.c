@@ -14,7 +14,11 @@ void setup_main_dirs()
 	snprintf(images_path, MAX_PATH, "%s/%s", config.main_path, "images"); 
 	snprintf(sys_path, MAX_PATH, "%s/%s", config.main_path, "syscards"); 
 	
-	make_directory(config.main_path);
+	if(stat(config.main_path, &sb))
+	{
+		printf("save_states directory doesn't exist, creating\n");
+		make_directory(config.main_path);
+	}
 	
 	if(stat(save_path, &sb))
 	{
@@ -284,6 +288,7 @@ int main(int argc, char *argv[])
   u32 command_line_options;
   u32 benchmark_frames = benchmark_frame_interval;
 
+
 #ifdef PSP_BUILD
   delay_us(2000000);
 
@@ -316,6 +321,11 @@ int main(int argc, char *argv[])
   if((argc > 1) && (argv[argc - 1][0] != '-'))
   {
     printf("Loading ROM %s\n", argv[argc - 1]);
+  
+	if (strstr(argv[1], ".bin") || strstr(argv[1], ".iso") )
+	{
+		return;
+	}
 
     if(load_rom(argv[argc - 1]) == -1)
     {
