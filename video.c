@@ -627,9 +627,9 @@ void initialize_palette_convert()
 
   for(color = 0; color < 512; color++)
   {
-    g = ((color >> 6) & 0x7) + 1;
-    r = ((color >> 3) & 0x7) + 1;
-    b = (color & 0x7) + 1;
+    g = ((color >> 6) & 0x7) + 0.8;
+    r = ((color >> 3) & 0x7) + 0.8;
+    b = (color & 0x7) + 0.8;
 
     y = (r * 133) + (g * 261) + (b * 49);
     ry = (r * 214) + (g * -180) + (b * -34);
