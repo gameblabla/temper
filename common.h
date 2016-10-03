@@ -49,7 +49,7 @@ typedef signed long long int s64;
   #include "gp2x/gp2x_common.h"
 #endif
 
-#define TEMPER_VERSION "1.23.1 GCW"
+#define TEMPER_VERSION "1.23.2 GCW"
 #define CD_SWAP_OPTION
 #define FASTFORWARD_FRAMESKIP
 #define FASTFORWARD_FRAMESKIP_RATE 4

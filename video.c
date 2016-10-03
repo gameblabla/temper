@@ -2,6 +2,8 @@
 
 // Put temp debug vars here
 
+#define	RGB(r, g, b)	((((r) >> 3) << 11) | (((g) >> 2) << 5) | ((b) >> 3))
+
 u64 scanline_cycle_counter;
 
 // ARM versions are using this, but it doesn't really hurt to
@@ -616,20 +618,22 @@ void reset_vdc(vdc_struct *vdc)
 
 vce_struct vce;
 
-u16 palette_convert[512];
+u32 palette_convert[512];
 
 void initialize_palette_convert()
 {
-  s32 color, r, g, b;
-  s32 y, ry, by;
-  double f_y, f_ry, f_by;
-  double f_r, f_g, f_b;
-
+	FILE* fp;
+	s32 color, r, g, b;
+	s32 y, ry, by;
+	double f_y, f_ry, f_by;
+	double f_r, f_g, f_b;
+  
   for(color = 0; color < 512; color++)
   {
-    g = ((color >> 6) & 0x7) + 0.8;
-    r = ((color >> 3) & 0x7) + 0.8;
-    b = (color & 0x7) + 0.8;
+	
+    g = ((color >> 6) & 0x7);
+    r = ((color >> 3) & 0x7);
+    b = (color & 0x7);
 
     y = (r * 133) + (g * 261) + (b * 49);
     ry = (r * 214) + (g * -180) + (b * -34);

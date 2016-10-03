@@ -173,7 +173,6 @@
 #define COLOR_RGB_565
 #define CRC_CHECK
 
-#define MIPS_ARCH
 #define LINUX_PLATFORM
 #define LETSGO_HOME
 #define KEYBOARD_SUPPORT
