@@ -3,7 +3,7 @@
 
 # Global definitions
 
-CC        = gcc-6
+CC        = gcc
 STRIP     = strip
 
 PREFIX    = /usr

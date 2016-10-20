@@ -20,7 +20,7 @@ BIN       ?= temper
 VPATH      += .. ../SDL ../linux ../tremor
 CFLAGS     += -DGCW_BUILD -Ofast -mips32r2 -mmxu -fdata-sections -ffunction-sections
 INCLUDES   = 
-LIBS       = -lSDL -lz -lm -lbz2 -pthread -flto -Wl,--as-needed -Wl,--gc-sections -s
+LIBS       = -lSDL -lz -lm -lbz2 -pthread -Wl,--as-needed -Wl,--gc-sections -flto -s
 
 # Compilation:
 

@@ -1,9 +1,11 @@
 #include "common.h"
+#include "palette.h"
 
 // Put temp debug vars here
 
 #define	RGB(r, g, b)	((((r) >> 3) << 11) | (((g) >> 2) << 5) | ((b) >> 3))
 
+//u64 scanline_cycle_counter;
 u64 scanline_cycle_counter;
 
 // ARM versions are using this, but it doesn't really hurt to
@@ -618,11 +620,10 @@ void reset_vdc(vdc_struct *vdc)
 
 vce_struct vce;
 
-u32 palette_convert[512];
 
 void initialize_palette_convert()
 {
-	FILE* fp;
+	/*FILE* fp;
 	s32 color, r, g, b;
 	s32 y, ry, by;
 	double f_y, f_ry, f_by;
@@ -704,7 +705,7 @@ void initialize_palette_convert()
 #ifdef COLOR_RGB_555
     palette_convert[color] = (r << 10) | (g << 5) | b;
 #endif
-  }
+  }*/
 }
 
 void vce_control_write(u32 value)
@@ -795,6 +796,7 @@ void vce_data_write_low(u32 value)
       u32 i;
       u16 *palette_ptr = vce.palette_cache +
        (vce.palette_offset & 0x100);
+
       palette_entry = palette_convert[palette_entry];
 
       for(i = 0; i < 16; i++)
@@ -828,6 +830,7 @@ void vce_data_write_high(u32 value)
       u32 i;
       u16 *palette_ptr = vce.palette_cache +
        (vce.palette_offset & 0x100);
+       
       palette_entry = palette_convert[palette_entry];
 
       for(i = 0; i < 16; i++)
