@@ -435,12 +435,13 @@ void get_gui_input(gui_input_struct *gui_input)
 
 void initialize_event()
 {
-  u32 joystick_count = SDL_NumJoysticks();
-  printf("%d joysticks\n", joystick_count);
-  if(joystick_count > 0)
-  {
-    SDL_JoystickOpen(0);
-    SDL_JoystickEventState(SDL_ENABLE);
-  }
+	u32 joystick_count = SDL_NumJoysticks();
+	printf("%d joysticks\n", joystick_count);
+	
+	if(joystick_count > 0)
+	{
+		SDL_JoystickOpen(0);
+		SDL_JoystickEventState(SDL_ENABLE);
+	}
 }
 
