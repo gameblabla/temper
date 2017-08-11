@@ -21,9 +21,9 @@ u32 key_map(u32 keys)
 {
 	unsigned char i, chosen_key;
 	
-	chosen_key = 24;
+	chosen_key = 12;
 
-	for (i=0;i<12;i++)
+	for (i=0;i<13;i++)
 	{
 		if (keys == sdl_to_config_map[i])
 		{
@@ -70,6 +70,7 @@ u32 key_map(u32 keys)
 		case 11:
 		  return CONFIG_BUTTON_SELECT;
 
+		case 12:
 		default:
 		  return CONFIG_BUTTON_NONE;
 	}
@@ -205,7 +206,7 @@ u32 update_input(event_input_struct *event_input)
         event_input->config_button_action = key_map(event.key.keysym.sym);
         break;
 
-      case SDL_JOYBUTTONDOWN:
+      /*case SDL_JOYBUTTONDOWN:
         event_input->action_type = INPUT_ACTION_TYPE_PRESS;
         event_input->config_button_action = joy_button_map(event.jbutton.button);
         break;
@@ -217,7 +218,7 @@ u32 update_input(event_input_struct *event_input)
 
       case SDL_JOYHATMOTION:
         event_input->hat_status = joy_hat_map(event.jhat.value);
-        break;
+        break;*/
     }
   }
   else
@@ -367,7 +368,7 @@ void get_gui_input(gui_input_struct *gui_input)
         gui_actions[key_map_gui_action(event.key.keysym.sym)] = 0;
         break;
 
-      case SDL_JOYBUTTONDOWN:
+      /*case SDL_JOYBUTTONDOWN:
         gui_action = joy_map_gui_action(event.jbutton.button);
         gui_actions[gui_action] = 1;
         break;
@@ -389,7 +390,7 @@ void get_gui_input(gui_input_struct *gui_input)
       case SDL_JOYHATMOTION:
         gui_action = joy_hat_map_gui_action(event.jhat.value);
         gui_actions[gui_action] = 1;
-        break;
+        break;*/
     }
   }
 
@@ -435,13 +436,13 @@ void get_gui_input(gui_input_struct *gui_input)
 
 void initialize_event()
 {
-	u32 joystick_count = SDL_NumJoysticks();
+	/*u32 joystick_count = SDL_NumJoysticks();
 	printf("%d joysticks\n", joystick_count);
 	
 	if(joystick_count > 0)
 	{
 		SDL_JoystickOpen(0);
 		SDL_JoystickEventState(SDL_ENABLE);
-	}
+	}*/
 }
 
