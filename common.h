@@ -38,7 +38,7 @@ typedef signed long long int s64;
 #endif
 
 #ifdef SDL_INIT
-  #include <SDL.h>
+  #include <SDL/SDL.h>
 #endif
 
 #ifdef BZ_SUPPORT
@@ -49,7 +49,7 @@ typedef signed long long int s64;
   #include "gp2x/gp2x_common.h"
 #endif
 
-#define TEMPER_VERSION "1.24.1 GCW"
+#define TEMPER_VERSION "1.24.2 GCW"
 #define CD_SWAP_OPTION
 #define FASTFORWARD_FRAMESKIP
 #define FASTFORWARD_FRAMESKIP_RATE 4
