@@ -1,4 +1,3 @@
-======================
 Temper for GCW0
 ======================
 
@@ -19,12 +18,11 @@ To install the emulator, put the opk in /media/data/apps.
 Alternatively, you can also put the syscards bios in /media/home/.temper/syscards.
 Name it syscard3.pce and you're ready to play CD games !
 
-
-============
 FAQ
 ============
 
 Q :  I can't play my CD games ? It throws me back to the menu !
+
 A : First of all, make sure you pick up the cue file, not the iso file.
 Check the cue file and see if the path to the iso is correct.
 Check the case of the iso file as Temper is case-sensitive !
@@ -43,5 +41,6 @@ Then Change Options -> CD-Rom System and select "acd".
 You will then be able to play Arcade CD games.
 
 Q: I want to customise Controls, is it possible ?
+
 A : Yes, simply go to Configure pad in the menu and change the controls to your liking.
 Note that rapid fire at this time is not yet suported.
