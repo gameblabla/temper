@@ -1383,8 +1383,10 @@ s32 load_rom(char *path)
     if(strstr(path, ".cue"))
     {
       if(load_bin_cue(path) == -1)
+      {
+        if (rom_file) fclose(rom_file);
         return -1;
-
+	  }
       config.cd_loaded = 1;
     }
 
