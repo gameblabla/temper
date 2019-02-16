@@ -1,0 +1,41 @@
+# PCE emulator makefile
+# Gilead Kutnick - Exophase
+
+# Global definitions
+AS        = /opt/rs97-toolchain/bin/mipsel-linux-as
+CC        = /opt/rs97-toolchain/bin/mipsel-linux-gcc
+STRIP     = /opt/rs97-toolchain/bin/mipsel-linux-strip --strip-all --remove-section=.comment  --remove-section=.note
+
+OBJS      = main.o cpu.o memory.o irq.o io.o video.o timer.o psg.o disasm.o    \
+            screen.o event.o audio.o menu.o debug.o cd.o adpcm.o netplay.o     \
+            arcade_card.o bin_cue.o                                         \
+            SDL_main.o SDL_screen.o SDL_event.o SDL_menu.o SDL_audio.o crc32.o \
+			bitwise.o block.o codebook.o floor0.o floor1.o framing.o \
+			info.o mapping0.o mdct.o registry.o res012.o sharedbook.o \
+			synthesis.o vorbisfile.o window.o
+BIN       ?= temper 
+
+# Platform specific definitions
+
+VPATH      += .. ../SDL ../linux ../tremor
+CFLAGS     += -DRS97_BUILD -Ofast -mips32 -fdata-sections -ffunction-sections -mno-check-zero-division -mno-abicalls -fno-PIC
+CFLAGS	   += -fprofile-use
+INCLUDES   = 
+LIBS       = -lSDL -lgcov -lz -lm -pthread -Wl,--as-needed -Wl,--gc-sections -flto -s
+
+# Compilation:
+
+.SUFFIXES: .c .S
+
+%.o: %.c
+	${CC} ${CFLAGS} ${INCLUDES} -c -o $@ $<
+
+%.o: %.S
+	${AS} -o $@ $<
+
+all:	${OBJS}
+	${CC} ${OBJS} ${LIBS} -o ${BIN}  
+	${STRIP} ${BIN}
+
+clean:
+	rm -f *.o ${BIN} 

@@ -1,5 +1,5 @@
 Temper for GCW0
-======================
+===============
 
 Temper was originally a PC-Engine emulator by Exophase,
 originally made for the GP2X and then ported to other devices.
@@ -19,7 +19,7 @@ Alternatively, you can also put the syscards bios in /media/home/.temper/syscard
 Name it syscard3.pce and you're ready to play CD games !
 
 FAQ
-============
+====
 
 Q :  I can't play my CD games ? It throws me back to the menu !
 

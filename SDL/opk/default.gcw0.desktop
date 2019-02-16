@@ -6,3 +6,4 @@ Exec=temper %f
 Icon=icon
 Terminal=false
 Categories=emulators;
+MimeType=.pce
