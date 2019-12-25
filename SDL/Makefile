@@ -11,7 +11,7 @@ OBJS      = main.o cpu.o memory.o irq.o io.o video.o timer.o psg.o disasm.o    \
             screen.o event.o audio.o menu.o debug.o cd.o adpcm.o netplay.o     \
             arcade_card.o bin_cue.o                                            \
             SDL_main.o SDL_screen.o SDL_audio.o SDL_event.o SDL_menu.o crc32.o
-BIN       ?= temper 
+BIN       ?= opk/temper 
 
 # Platform specific definitions 
 

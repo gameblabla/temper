@@ -13,7 +13,7 @@ OBJS      = main.o cpu.o memory.o irq.o io.o video.o timer.o psg.o disasm.o    \
 			bitwise.o block.o codebook.o floor0.o floor1.o framing.o \
 			info.o mapping0.o mdct.o registry.o res012.o sharedbook.o \
 			synthesis.o vorbisfile.o window.o
-BIN       ?= temper 
+BIN       ?= opk/temper_rs97 
 
 # Platform specific definitions
 

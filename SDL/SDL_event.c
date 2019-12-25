@@ -1,7 +1,7 @@
 #include "../common.h"
 #include "SDL_event.h"
 
-u32 sdl_to_config_map[] =
+u32 sdl_to_config_map[MAX_CONTROLS] =
 {
 	SDLK_UP,
 	SDLK_DOWN,
@@ -14,20 +14,25 @@ u32 sdl_to_config_map[] =
 	SDLK_TAB,
 	SDLK_BACKSPACE,
 	SDLK_RETURN,
-	SDLK_ESCAPE
+	SDLK_ESCAPE,
+	SDLK_PAGEUP,
+	SDLK_PAGEDOWN,
+	SDLK_KP_DIVIDE,
+	SDLK_KP_PERIOD
 };
 
 u32 key_map(u32 keys)
 {
 	unsigned char i, chosen_key;
 	
-	chosen_key = 12;
+	chosen_key = MAX_CONTROLS;
 
-	for (i=0;i<13;i++)
+	for (i=0;i<MAX_CONTROLS;i++)
 	{
 		if (keys == sdl_to_config_map[i])
 		{
 			chosen_key = config.pad[i];
+			//printf("chosen_key %d\n", chosen_key);
 			break;
 		}
 	}
@@ -71,6 +76,21 @@ u32 key_map(u32 keys)
 		  return CONFIG_BUTTON_SELECT;
 
 		case 12:
+			return CONFIG_BUTTON_RAPID_I;
+		break;
+		
+		case 13:
+			return CONFIG_BUTTON_RAPID_II;
+		break;
+		
+		case 23:
+			return CONFIG_BUTTON_FAST_FORWARD;
+		break;
+		
+		case 18:
+			return CONFIG_BUTTON_MENU;
+		break;
+		
 		default:
 		  return CONFIG_BUTTON_NONE;
 	}
@@ -138,11 +158,8 @@ u32 update_input(event_input_struct *event_input)
 
         switch(event.key.keysym.sym)
         {
-#ifdef RS97_BUILD
-          case SDLK_END:
-#else
-          case SDLK_ESCAPE:
-#endif
+			case SDLK_END:
+			//case SDLK_HOME:
 			event_input->config_button_action = CONFIG_BUTTON_MENU;
             //event_input->key_action = KEY_ACTION_QUIT;
             break;
@@ -206,8 +223,18 @@ u32 update_input(event_input_struct *event_input)
         break;
 
       case SDL_KEYUP:
-        event_input->action_type = INPUT_ACTION_TYPE_RELEASE;
-        event_input->config_button_action = key_map(event.key.keysym.sym);
+		event_input->action_type = INPUT_ACTION_TYPE_RELEASE;
+        switch(event.key.keysym.sym)
+        {
+			case SDLK_HOME:
+				event_input->action_type = INPUT_ACTION_TYPE_PRESS;
+				event_input->config_button_action = CONFIG_BUTTON_MENU;
+				return 1;
+            break;
+			default:
+				event_input->config_button_action = key_map(event.key.keysym.sym);
+			break;
+		}
         break;
 
       case SDL_JOYBUTTONDOWN:
@@ -280,7 +307,9 @@ gui_action_type joy_hat_map_gui_action(u32 hat_value)
       break;
     default:
 		return CURSOR_NONE;
+	break;
   }
+  return CURSOR_NONE;
 }
 
 gui_action_type key_map_gui_action(u32 key)
@@ -309,11 +338,11 @@ gui_action_type key_map_gui_action(u32 key)
     case SDLK_LALT:
       return CURSOR_BACK;
 
-    /*case SDLK_PAGEUP:
+    case SDLK_PAGEUP:
       return CURSOR_PAGE_UP;
 
     case SDLK_PAGEDOWN:
-      return CURSOR_PAGE_DOWN;*/
+      return CURSOR_PAGE_DOWN;
   }
 
   return CURSOR_NONE;

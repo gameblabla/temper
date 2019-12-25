@@ -570,13 +570,13 @@ void draw_numeric(menu_state_struct *menu_state,
 void draw_numeric_labeled(menu_state_struct *menu_state,
  menu_option_struct *menu_option, u32 selected)
 {
-  char display_str[256];
+  char display_str[64];
   menu_option_numeric_struct *numeric =
    (menu_option_numeric_struct *)menu_option;
   menu_option_numeric_labeled_struct *numeric_labeled =
    (menu_option_numeric_labeled_struct *)menu_option;
 
-  sprintf(display_str, "%s%s", menu_option->name,
+  snprintf(display_str, sizeof(display_str), "%s%s", menu_option->name,
    numeric_labeled->labels[*(numeric->value)]);
   draw_menu_option_string(menu_state, menu_option, display_str,
    selected);

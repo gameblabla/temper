@@ -2,9 +2,9 @@
 # Gilead Kutnick - Exophase
 
 # Global definitions
-AS        = mipsel-linux-as
-CC        = mipsel-linux-gcc
-STRIP     = mipsel-linux-strip --strip-all --remove-section=.comment  --remove-section=.note
+AS        = /opt/gcw0-toolchain-static/bin/mipsel-linux-as
+CC        = /opt/gcw0-toolchain-static/bin/mipsel-linux-gcc
+STRIP     = /opt/gcw0-toolchain-static/bin/mipsel-linux-strip --strip-all --remove-section=.comment  --remove-section=.note
 
 OBJS      = main.o cpu.o memory.o irq.o io.o video.o timer.o psg.o disasm.o    \
             screen.o event.o audio.o menu.o debug.o cd.o adpcm.o netplay.o     \
@@ -18,9 +18,9 @@ BIN       ?= temper
 # Platform specific definitions
 
 VPATH      += .. ../SDL ../linux ../tremor
-CFLAGS     += -DGCW_BUILD -Ofast -mips32r2 -mmxu -fdata-sections -ffunction-sections
+CFLAGS     += -DGCW_BUILD -Ofast  -mno-fp-exceptions -mno-check-zero-division -mframe-header-opt -mips32r2 -fno-PIC -mno-abicalls -flto
 INCLUDES   = 
-LIBS       = -lSDL -lz -lm -lbz2 -pthread -Wl,--as-needed -Wl,--gc-sections -flto -s
+LIBS       = -nodefaultlibs -lc -lgcc -lSDL -lasound -lz -lm -lbz2 -pthread -Wl,--as-needed -Wl,--gc-sections -flto -s
 
 # Compilation:
 

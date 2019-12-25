@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Temper
+Comment=PC-Engine emulator
+Exec=temper_rs97 %f
+Icon=icon
+Terminal=false
+Categories=emulators;
+MimeType=.pce
