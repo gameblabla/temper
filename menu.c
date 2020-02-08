@@ -1794,7 +1794,7 @@ void menu(u32 start_file_dialog)
   s32 menu_option_change = 0;
 
   gui_input_struct gui_input;
-  gui_action_type current_action;
+  gui_action_type current_action = CURSOR_NONE;
 
   menu_struct *current_menu;
   menu_option_struct *current_menu_option;
@@ -1824,7 +1824,8 @@ void menu(u32 start_file_dialog)
 
   if(start_file_dialog)
     select_load_game(&menu_state, NULL);
-
+    
+ 
   while(menu_state.exit_menu == 0)
   {
     current_menu = menu_state.current_menu;
@@ -1936,5 +1937,6 @@ void menu(u32 start_file_dialog)
 		update_screen();
    }
    #endif
+   reset_io_buttons();
 }
 

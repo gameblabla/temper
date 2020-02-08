@@ -41,6 +41,7 @@ void io_port_write(u32 value);
 
 void initialize_io();
 void reset_io();
+void reset_io_buttons();
 
 void io_load_savestate(savestate_load_type savestate_file);
 void io_store_savestate(savestate_store_type savestate_file);

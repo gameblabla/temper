@@ -128,38 +128,19 @@ void set_screen_resolution(u32 width, u32 height)
       SDL_FreeSurface(screen);
     }
 
-    switch(config.scale_factor)
-    {
-      case SCALE_FULLSCREEN:
-        screen = SDL_SetVideoMode(width, height, 16, SDL_FULLSCREEN
-#ifdef SDL_TRIPLEBUF
-        | SDL_HWSURFACE | SDL_TRIPLEBUF
-#endif
-         );
-        real_screen_pixels = screen->pixels;
-
-        if(old_pixels != NULL)
-          blit_screen(old_pixels);
-
-        break;
-
-      default:
-        screen = SDL_SetVideoMode(width, height, 16, 
-#ifdef SDL_TRIPLEBUF
-		SDL_HWSURFACE | SDL_TRIPLEBUF
+#ifdef FORCE_RESOLUTION
+	screen = SDL_SetVideoMode(320, 240, 16, SDL_HWSURFACE
 #else
-	0
-#endif
-		);
-  
-        if(old_pixels != NULL)
-          blit_screen(old_pixels);
-	break;
-    }
+	screen = SDL_SetVideoMode(width, height, 16, SDL_HWSURFACE
+#endif	
 
-    if(old_pixels != NULL)
-      free(old_pixels);
-
+	);
+	real_screen_pixels = screen->pixels;
+	if(old_pixels != NULL)
+	{
+		blit_screen(old_pixels);
+		free(old_pixels);
+	}
     last_scale_factor = config.scale_factor;
   }
 

@@ -28,6 +28,7 @@ vpc_struct vpc;
 void update_satb(vdc_struct *vdc);
 void vdc_vram_dma_line(vdc_struct *vdc);
 
+/* Gameblabla - Make sure that SDL can adjust the video size here (max should be 512x256) */
 static void vdc_update_width(vdc_struct *vdc)
 {
   s32 screen_width = (vdc->hdw + 1) * 8;
@@ -745,8 +746,12 @@ void vce_control_write(u32 value)
       break;
   }
 
-  vce.screen_center_offset = (RESOLUTION_WIDTH - vce.screen_width) / 2;
-
+#ifdef IPU_SCALING
+	vce.screen_center_offset = 0;
+#else
+	vce.screen_center_offset = (RESOLUTION_WIDTH - vce.screen_width) / 2;
+#endif
+	
   vdc_update_width(&vdc_a);
 
   if(config.sgx_mode)

@@ -137,13 +137,28 @@ u32 joy_hat_map(u32 hat_value)
 u32 update_input(event_input_struct *event_input)
 {
   SDL_Event event;
+  int result_event;
 
   event_input->config_button_action = CONFIG_BUTTON_NONE;
   event_input->key_action = KEY_ACTION_NONE;
   event_input->key_letter = 0;
   event_input->hat_status = HAT_STATUS_NONE;
-  
-  if(SDL_PollEvent(&event))
+ 
+ 	#ifdef GKD350H_INPUT_BUG
+	uint8_t* keystate;
+	keystate = SDL_GetKeyState(NULL);
+	result_event = SDL_PollEvent(&event);
+	if (keystate[SDLK_TAB] && keystate[SDLK_BACKSPACE])
+	{
+		event_input->action_type = INPUT_ACTION_TYPE_PRESS;
+		event_input->config_button_action = CONFIG_BUTTON_MENU;
+		return 1;
+	}
+	#else
+	result_event = SDL_PollEvent(&event);
+	#endif 
+ 
+  if (result_event)
   {
     switch(event.type)
     {
@@ -254,7 +269,7 @@ u32 update_input(event_input_struct *event_input)
   }
   else
   {
-    return 0;
+	return 0;
   }
 
   return 1;

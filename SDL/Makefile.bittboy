@@ -2,9 +2,9 @@
 # Gilead Kutnick - Exophase
 
 # Global definitions
-AS        = /opt/gcw0-toolchain-static/bin/mipsel-linux-as
-CC        = /opt/gcw0-toolchain-static/bin/mipsel-linux-gcc
-STRIP     = /opt/gcw0-toolchain-static/bin/mipsel-linux-strip --strip-all --remove-section=.comment  --remove-section=.note
+AS        = /opt/bittboy-toolchain-static/bin/arm-linux-as
+CC        = /opt/bittboy-toolchain-static/bin/arm-linux-gcc
+STRIP     = /opt/bittboy-toolchain-static/bin/arm-linux-strip --strip-all --remove-section=.comment  --remove-section=.note
 
 OBJS      = main.o cpu.o memory.o irq.o io.o video.o timer.o psg.o disasm.o    \
             screen.o event.o audio.o menu.o debug.o cd.o adpcm.o netplay.o     \
@@ -18,7 +18,7 @@ BIN       ?= temper
 # Platform specific definitions
 
 VPATH      += .. ../SDL ../linux ../tremor
-CFLAGS     += -DGCW_BUILD -DFORCE_RESOLUTION -Ofast  -mno-fp-exceptions -mno-check-zero-division -mframe-header-opt -mips32r2 -fno-PIC -mno-abicalls -flto
+CFLAGS     += -DGCW_BUILD -Ofast -march=armv5te -mtune=arm926ej-s -fno-PIC -flto
 INCLUDES   = 
 LIBS       = -nodefaultlibs -lc -lgcc -lSDL -lasound -lz -lm -lbz2 -pthread -Wl,--as-needed -Wl,--gc-sections -flto -s
 
@@ -35,6 +35,8 @@ LIBS       = -nodefaultlibs -lc -lgcc -lSDL -lasound -lz -lm -lbz2 -pthread -Wl,
 all:	${OBJS}
 	${CC} ${OBJS} ${LIBS} -o ${BIN}  
 	${STRIP} ${BIN}
-	
+	mv temper ./opk/temper
+	sh pack.sh
+
 clean:
 	rm -f *.o ${BIN} 
