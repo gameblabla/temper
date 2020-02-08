@@ -129,12 +129,16 @@ void set_screen_resolution(u32 width, u32 height)
     }
 
 #ifdef FORCE_RESOLUTION
-	screen = SDL_SetVideoMode(320, 240, 16, SDL_HWSURFACE
+	screen = SDL_SetVideoMode(320, 240, 16, SDL_HWSURFACE | SDL_DOUBLEBUF);
 #else
 	screen = SDL_SetVideoMode(width, height, 16, SDL_HWSURFACE
+#ifdef SDL_TRIPLEBUF
+	| SDL_TRIPLEBUF
+#endif
+	);
 #endif	
 
-	);
+
 	real_screen_pixels = screen->pixels;
 	if(old_pixels != NULL)
 	{
