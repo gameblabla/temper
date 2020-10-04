@@ -2,9 +2,9 @@
 # Gilead Kutnick - Exophase
 
 # Global definitions
-AS        = /opt/gcw0-toolchain-static/bin/mipsel-linux-as
-CC        = /opt/gcw0-toolchain-static/bin/mipsel-linux-gcc
-STRIP     = /opt/gcw0-toolchain-static/bin/mipsel-linux-strip --strip-all --remove-section=.comment  --remove-section=.note
+AS        = /opt/gcw0-toolchain/bin/mipsel-linux-as
+CC        = /opt/gcw0-toolchain/bin/mipsel-linux-gcc
+STRIP     = /opt/gcw0-toolchain/bin/mipsel-linux-strip --strip-all --remove-section=.comment  --remove-section=.note
 
 OBJS      = main.o cpu.o memory.o irq.o io.o video.o timer.o psg.o disasm.o    \
             screen.o event.o audio.o menu.o debug.o cd.o adpcm.o netplay.o     \
@@ -14,13 +14,21 @@ OBJS      = main.o cpu.o memory.o irq.o io.o video.o timer.o psg.o disasm.o    \
 			info.o mapping0.o mdct.o registry.o res012.o sharedbook.o \
 			synthesis.o vorbisfile.o window.o
 BIN       ?= temper 
+HUGE_PAGES = 1
 
 # Platform specific definitions
 
 VPATH      += .. ../SDL ../linux ../tremor
-CFLAGS     += -DGCW_BUILD -DFORCE_RESOLUTION -Ofast  -mno-fp-exceptions -mno-check-zero-division -mframe-header-opt -mips32r2 -fno-PIC -mno-abicalls -flto
+CFLAGS     += -DGCW_BUILD -DFORCE_RESOLUTION -Ofast -fprofile-use -mno-fp-exceptions -mno-check-zero-division -mframe-header-opt -mips32r2 -fno-PIC -mno-abicalls -flto
 INCLUDES   = 
-LIBS       = -nodefaultlibs -lc -lgcc -lSDL -lasound -lz -lm -lbz2 -pthread -Wl,--as-needed -Wl,--gc-sections -flto -s
+
+ifeq ($(HUGE_PAGES), 0)
+LIBS		= -nodefaultlibs
+endif
+LIBS       += -lc -lgcc -lSDL -lasound -lz -lm -lbz2 -pthread -Wl,--as-needed -Wl,--gc-sections -flto -s
+ifeq ($(HUGE_PAGES), 1)
+LIBS		+= -Wl,-zcommon-page-size=2097152 -Wl,-zmax-page-size=2097152 -lhugetlbfs
+endif
 
 # Compilation:
 
@@ -35,6 +43,9 @@ LIBS       = -nodefaultlibs -lc -lgcc -lSDL -lasound -lz -lm -lbz2 -pthread -Wl,
 all:	${OBJS}
 	${CC} ${OBJS} ${LIBS} -o ${BIN}  
 	${STRIP} ${BIN}
+ifeq ($(HUGE_PAGES), 1)
+	hugeedit --text --data $(BIN)
+endif
 	
 clean:
 	rm -f *.o ${BIN} 
