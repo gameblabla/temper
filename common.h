@@ -283,7 +283,7 @@ typedef struct
 #include "bin_cue.h"
 
 
-#ifdef LINUX_PLATFORM
+#if defined(LINUX_PLATFORM) || defined(GCW_BUILD)
 
 #include <fcntl.h>
 #include <strings.h>
@@ -309,6 +309,8 @@ typedef struct
 #include <winsock.h>
 
 #endif
+
+extern u32 isrunning;
 
 #endif
 

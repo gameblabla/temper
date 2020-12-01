@@ -16,7 +16,7 @@ BIN       ?= temper
 # Platform specific definitions 
 
 VPATH      += .. ../SDL ../linux
-CFLAGS     += -DLINUX_X86_BUILD -DGKD350H_INPUT_BUG -O0 -Wall
+CFLAGS     += -DLINUX_X86_BUILD -DGKD350H_INPUT_BUG -DIPU_SCALING -O0 -g3 -Wall
 INCLUDES   = -I${PREFIX}/include `sdl-config --cflags`
 LIBS       = -L${PREFIX}/lib `sdl-config --libs` -lz -lm -pthread
 

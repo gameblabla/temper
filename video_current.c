@@ -622,7 +622,7 @@ void initialize_video()
   vdc.screen_width = 320;
   vdc.screen_height = 240;
 
-  set_screen_resolution(output_width, output_height);
+  set_screen_resolution(output_width, output_height, game);
 }
 
 void cache_tile(u32 tile_number)
@@ -728,7 +728,7 @@ void display_tileset(u32 palette_number)
   u32 *tile_ptr;
   u32 tile_row;
 
-  set_screen_resolution(512, 256);
+  set_screen_resolution(512, 256, game);
   screen_ptr = get_screen_ptr();
   screen_pitch = get_screen_pitch();
 
@@ -778,7 +778,7 @@ void display_tilemap(s32 palette_number_override)
   u32 *tile_ptr;
   u32 tile_row;
 
-  set_screen_resolution(bg_width * 8, bg_height * 8);
+  set_screen_resolution(bg_width * 8, bg_height * 8, game);
   screen_ptr = get_screen_ptr();
   screen_pitch = get_screen_pitch();
 
@@ -827,7 +827,7 @@ void display_patternset(u32 palette_number)
   u32 *pattern_ptr;
   u32 pattern_half_row;
 
-  set_screen_resolution(512, 256);
+  set_screen_resolution(512, 256, game);
   screen_ptr = get_screen_ptr();
   screen_pitch = get_screen_pitch();
 

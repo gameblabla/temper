@@ -5,7 +5,7 @@ void update_screen()
   gp2x_update_screen();
 }
 
-void set_screen_resolution(u32 width, u32 height)
+void set_screen_resolution(u32 width, u32 height, u32)
 {
   gp2x_initialize_screen();
 }

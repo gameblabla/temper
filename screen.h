@@ -7,7 +7,7 @@
 void *get_screen_ptr();
 u32 get_screen_pitch();
 void update_screen();
-void set_screen_resolution(u32 width, u32 height);
+void set_screen_resolution(u32 width, u32 height, u32 game);
 
 void print_string_ext(const char *str, u32 fg_color, u32 bg_color,
  u32 x, u32 y, u16 *_dest_ptr, u16 *_bg_ptr, u32 pitch, u32 pad,
@@ -22,7 +22,7 @@ void set_font_narrow();
 
 void clear_screen();
 void clear_line_edges(u32 line_number, u32 color, u32 edge, u32 middle);
-void copy_screen(u16 *dest);
+void copy_screen(u16 *dest, u16 width, u16 height);
 void blit_screen(u16 *src);
 void copy_screen_half_intensity(u16 *dest);
 void copy_screen_quarter_intensity(u16 *dest);
@@ -31,6 +31,11 @@ void buffer_half_intensity(u16 *_dest, u16 *_pixels, u32 pitch);
 void set_multi_buffer_mode();
 void set_single_buffer_mode();
 void clear_all_buffers();
+void Kill_video();
+#ifdef IPU_SCALING
+int Get_Video_Height();
+#endif
+
 
 #endif
 

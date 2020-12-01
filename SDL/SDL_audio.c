@@ -108,6 +108,8 @@ void audio_exit()
 {
   audio.buffer_index = AUDIO_BUFFER_SIZE - 1;
   audio.buffer_base = 0;
+  SDL_PauseAudio(1);
+  SDL_Delay(25);
   SDL_CondSignal(audio_cv);
   SDL_LockMutex(audio_mutex);
   SDL_UnlockMutex(audio_mutex);

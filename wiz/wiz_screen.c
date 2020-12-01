@@ -5,7 +5,7 @@ void update_screen()
   wiz_update_screen();
 }
 
-void set_screen_resolution(u32 width, u32 height)
+void set_screen_resolution(u32 width, u32 height, u32 game)
 {
   wiz_initialize_screen();
 }

@@ -16,6 +16,18 @@ const u32 sgx_table[6] =
 	0xb486a8ed,
 	0x3b13af61,
 };
+
+#ifdef IPU_SCALING
+/* Gameblabla : TODO, expand cropping database */
+const u32 pce_crop_table[3][3] = 
+{
+	{0x91ce5156, 208, 34},
+	{0xd15cb6bb, 208, 33},
+	{0x91ce5156, 208, 34},
+};
+u32 height_crop = 0, framecounter_force = 0;
+#endif
+
 #endif
 
 char *get_mpr_region_name(u32 mpr_number)
@@ -1395,11 +1407,22 @@ s32 load_rom(char *path)
       
     #ifdef CRC_CHECK
     result = Crc32_ComputeFile(rom_file, &crc32);
+    printf("crc32 0x%x\n", crc32);
     for (i=0;i<6;i++)
     {
 		if (crc32 == sgx_table[i])
 		{
 			config.sgx_mode = 1;
+			break;
+		}
+	}  
+    for (i=0;i<3;i++)
+    {
+		if (crc32 == pce_crop_table[i][0])
+		{
+			//config.sgx_mode = 1;
+			height_crop = pce_crop_table[i][1];
+			framecounter_force = pce_crop_table[i][2];
 			break;
 		}
 	}  

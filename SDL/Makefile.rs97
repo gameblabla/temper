@@ -13,15 +13,15 @@ OBJS      = main.o cpu.o memory.o irq.o io.o video.o timer.o psg.o disasm.o    \
 			bitwise.o block.o codebook.o floor0.o floor1.o framing.o \
 			info.o mapping0.o mdct.o registry.o res012.o sharedbook.o \
 			synthesis.o vorbisfile.o window.o
-BIN       ?= opk/temper_rs97 
+BIN       ?= temper
 
 # Platform specific definitions
 
 VPATH      += .. ../SDL ../linux ../tremor
-CFLAGS     += -DRS97_BUILD -Ofast -mips32 -fdata-sections -ffunction-sections -mno-check-zero-division -mno-abicalls -fno-PIC
-CFLAGS	   += -fprofile-use
+CFLAGS     += -DRS97_BUILD -Ofast -mips32 -fdata-sections -ffunction-sections -mno-check-zero-division -mno-abicalls -fno-PIC -flto
+CFLAGS	   += 
 INCLUDES   = 
-LIBS       = -lSDL -lgcov -lz -lm -pthread -Wl,--as-needed -Wl,--gc-sections -flto -s
+LIBS       = -nodefaultlibs -lc -lgcc -lSDL -no-pie -lz -lm -pthread -Wl,--as-needed -Wl,--gc-sections -flto -s
 
 # Compilation:
 

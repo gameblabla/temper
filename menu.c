@@ -1380,7 +1380,9 @@ void focus_menu_options(menu_state_struct *menu_state, menu_struct *menu,
     old_ram_timings = config.ram_timings;
     old_clock_speed = config.clock_speed;
     old_gamma_percent = config.gamma_percent;
+#ifndef IPU_SCALING
     old_scale_width = config.scale_width;
+#endif
   }
   else
   {
@@ -1469,7 +1471,8 @@ void select_restart(menu_state_struct *menu_state,
 void select_quit(menu_state_struct *menu_state,
  menu_option_struct *menu_option)
 {
-  quit();
+  //quit();
+  isrunning = 0;
 }
 
 void select_return(menu_state_struct *menu_state,
@@ -1641,8 +1644,10 @@ menu_struct *create_menu_options(menu_state_struct *menu_state,
    current_line_number, &(config.cd_system_type), 0, 4, cd_card_labels));
   add_menu_option(create_numeric_labeled(NULL, "Per-game BRAM saves     ",
    current_line_number, &(config.per_game_bram), 0, 1, yes_no_labels));
+#ifndef IPU_SCALING
   add_menu_option(create_numeric_labeled(NULL, "Scale screen width      ",
    current_line_number, &(config.scale_width), 0, 1, yes_no_labels));
+#endif
   add_menu_option(create_numeric_labeled(NULL, "Allow >16 spr per line  ",
    current_line_number, &(config.unlimit_sprites), 0, 1, yes_no_labels));
 
@@ -1790,8 +1795,15 @@ menu_struct *create_menu_main(menu_state_struct *menu_state)
 
 void menu(u32 start_file_dialog)
 {
+#ifdef IPU_SCALING
+extern u32 game_width, game_height;
+#endif
   menu_struct *main_menu;
   s32 menu_option_change = 0;
+  
+#ifdef IPU_SCALING
+  set_screen_resolution(RESOLUTION_WIDTH, RESOLUTION_HEIGHT, 0);
+#endif
 
   gui_input_struct gui_input;
   gui_action_type current_action = CURSOR_NONE;
@@ -1819,14 +1831,16 @@ void menu(u32 start_file_dialog)
   if(netplay_can_send)
     send_netplay_pause();
 
-  copy_screen(menu_state.screen_bg);
+#ifndef IPU_SCALING
+  copy_screen(menu_state.screen_bg, 320, 240);
+#endif
   copy_screen_quarter_intensity(menu_state.screen_bg_quarter);
 
   if(start_file_dialog)
     select_load_game(&menu_state, NULL);
     
  
-  while(menu_state.exit_menu == 0)
+  while(menu_state.exit_menu == 0 && isrunning == 1)
   {
     current_menu = menu_state.current_menu;
 
@@ -1938,5 +1952,9 @@ void menu(u32 start_file_dialog)
    }
    #endif
    reset_io_buttons();
+   
+#ifdef IPU_SCALING
+	set_screen_resolution(game_width, game_height, 1);
+#endif
 }
 

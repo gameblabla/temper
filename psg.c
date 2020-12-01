@@ -295,6 +295,7 @@ void initialize_psg()
 {
   initialize_audio();
 
+  if (audio.output_frequency == 0) audio.output_frequency = 44100;
   psg.clock_step = (MASTER_CLOCK_RATE << step_fractional_bits_clock) /
    audio.output_frequency;
 

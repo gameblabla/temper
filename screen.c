@@ -110,17 +110,17 @@ void set_font_narrow()
   current_font = &font_a;
 }
 
-void copy_screen(u16 *dest)
+void copy_screen(u16 *dest, u16 width, u16 height)
 {
   u32 i;
   u32 pitch = get_screen_pitch();
   u16 *pixels = get_screen_ptr();
 
-  for(i = 0; i < 240; i++)
+  for(i = 0; i < height; i++)
   {
-    memcpy(dest, pixels, 320 * 2);
+    memcpy(dest, pixels, width * 2);
     pixels += pitch;
-    dest += 320;
+    dest += width;
   }
 }
 

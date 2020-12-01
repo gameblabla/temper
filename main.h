@@ -50,7 +50,7 @@ typedef struct
   u32 unlimit_sprites;
   u32 compatibility_mode;
 
-  char netplay_username[16];
+  char netplay_username[32];
   u32 netplay_type;
   u32 netplay_port;
   u32 netplay_ip;

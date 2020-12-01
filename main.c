@@ -1,5 +1,7 @@
 #include "common.h"
 
+u32 isrunning = 1;
+
 void setup_main_dirs()
 {
   struct stat sb;
@@ -235,7 +237,7 @@ u32 process_arguments(int argc, char *argv[])
             break;
 
           case 4:
-            strncpy(config.netplay_username, optarg, 128);
+            strncpy(config.netplay_username, optarg, 32);
             printf("Setting netplay username to %s\n", config.netplay_username);
             break;
 
@@ -368,7 +370,7 @@ int main(int argc, char *argv[])
   if(netplay.pause == 0)
     audio_unpause();
 
-  while(1)
+  while(isrunning)
   {
     if(netplay.active && netplay.pause)
     {
@@ -415,6 +417,8 @@ int main(int argc, char *argv[])
       }
     }
   }
+  
+	quit();
 
   return 0;
 }
@@ -945,7 +949,11 @@ void save_config_file(char *file_name)
 
   file_write_mem_save(config_file);
   file_write_mem_close(config_file);
-  free(config_file_buffer);
+  if (config_file_buffer)
+  {
+	  free(config_file_buffer);
+	  config_file_buffer = NULL;
+  }
 }
 
 void save_directory_config_file(char *file_name)
@@ -976,7 +984,11 @@ void save_directory_config_file(char *file_name)
 
   file_write_mem_save(config_file);
   file_write_mem_close(config_file);
-  free(config_file_buffer);
+  if (config_file_buffer)
+  {
+	  free(config_file_buffer);
+	  config_file_buffer = NULL;
+  }
 }
 
 s32 load_config_file(char *file_name)
@@ -1232,9 +1244,8 @@ void quit()
   save_directory_config_file("temper.cf2");
 
   audio_exit();
+  Kill_video();
   platform_quit();
-
-  exit(0);
 }
 
 void status_message_raw(char *message)
