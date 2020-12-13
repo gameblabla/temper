@@ -89,6 +89,10 @@ void set_screen_resolution(u32 width, u32 height, u32 game)
 		{
 			vce.pixels_drawn[i] = width;
 		}
+		if (screen != NULL && menu_screen != NULL)
+		{
+			if (game_width == screen->w && game_height == screen->h) return;
+		}
 	}
 #endif
 	

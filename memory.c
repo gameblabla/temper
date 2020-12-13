@@ -1416,6 +1416,7 @@ s32 load_rom(char *path)
 			break;
 		}
 	}  
+	#ifdef IPU_SCALING
     for (i=0;i<3;i++)
     {
 		if (crc32 == pce_crop_table[i][0])
@@ -1426,6 +1427,7 @@ s32 load_rom(char *path)
 			break;
 		}
 	}  
+	#endif
 	#endif
       
     if(strstr(path, ".bz2"))

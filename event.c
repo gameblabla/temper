@@ -35,8 +35,6 @@ void update_events(void)
   u32 talk_message_limit =
    (SCREEN_WIDTH_NARROW_CHARS * 2) - (strlen(config.netplay_username) + 2);
    
-   event_input.action_type = 0;
-
   while(update_input(&event_input))
   {
     if(talk_mode)
