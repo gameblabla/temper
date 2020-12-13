@@ -83,15 +83,15 @@ void set_screen_resolution(u32 width, u32 height, u32 game)
 #ifdef IPU_SCALING
 	if (game == 1)
 	{
+		if (screen != NULL)
+		{
+			if (width == screen->w && height == screen->h) return;
+		}
 		game_width = width;
 		game_height = height;
 		for(uint32_t i = 0; i < 242; i++)
 		{
 			vce.pixels_drawn[i] = width;
-		}
-		if (screen != NULL && menu_screen != NULL)
-		{
-			if (game_width == screen->w && game_height == screen->h) return;
 		}
 	}
 #endif
