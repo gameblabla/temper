@@ -2,11 +2,11 @@
 # Gilead Kutnick - Exophase
 
 # Global definitions
-AS        = /opt/bittboy-toolchain-static/bin/arm-linux-as
-CC        = /opt/bittboy-toolchain-static/bin/arm-linux-gcc
-STRIP     = /opt/bittboy-toolchain-static/bin/arm-linux-strip --strip-all --remove-section=.comment  --remove-section=.note
+AS        = /opt/bittboy-toolchain/bin/arm-linux-gcc
+CC        = /opt/bittboy-toolchain/bin/arm-linux-gcc
+STRIP     = /opt/bittboy-toolchain/bin/arm-linux-strip --strip-all --remove-section=.comment  --remove-section=.note
 
-OBJS      = main.o cpu.o memory.o irq.o io.o video.o timer.o psg.o disasm.o    \
+OBJS      = main.o cpu.o cpu_arm_compatible.o memory.o irq.o io.o video.o timer.o psg.o disasm.o    \
             screen.o event.o audio.o menu.o debug.o cd.o adpcm.o netplay.o     \
             arcade_card.o bin_cue.o                                         \
             SDL_main.o SDL_screen.o SDL_event.o SDL_menu.o SDL_audio.o crc32.o \
@@ -17,8 +17,8 @@ BIN       ?= temper
 
 # Platform specific definitions
 
-VPATH      += .. ../SDL ../linux ../tremor
-CFLAGS     += -DGCW_BUILD -Ofast -march=armv5te -mtune=arm926ej-s -fno-PIC -flto
+VPATH      += .. ../arm ../SDL ../linux ../tremor
+CFLAGS     += -DBITTBOY_BUILD -DARM_COMPAT -Ofast -march=armv5te -mtune=arm926ej-s -fno-PIC -flto
 INCLUDES   = 
 LIBS       = -nodefaultlibs -lc -lgcc -lSDL -lasound -lz -lm -lbz2 -pthread -Wl,--as-needed -Wl,--gc-sections -flto -s
 
@@ -27,16 +27,14 @@ LIBS       = -nodefaultlibs -lc -lgcc -lSDL -lasound -lz -lm -lbz2 -pthread -Wl,
 .SUFFIXES: .c .S
 
 %.o: %.c
-	${CC} ${CFLAGS} ${INCLUDES} -c -o $@ $<
+	${CC} ${CFLAGS} ${INCLUDES} -c -o $@ $< ${LIBS}
 
 %.o: %.S
-	${AS} -o $@ $<
+	${AS} ${CFLAGS} -c -o $@ $<
 
 all:	${OBJS}
-	${CC} ${OBJS} ${LIBS} -o ${BIN}  
+	${CC} ${OBJS} -o ${BIN} ${LIBS}
 	${STRIP} ${BIN}
-	mv temper ./opk/temper
-	sh pack.sh
 
 clean:
 	rm -f *.o ${BIN} 

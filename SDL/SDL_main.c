@@ -42,7 +42,7 @@ config_struct config =
   0,                 // u32 fast_forward;
   44100,             // u32 audio_output_frequency;
   1,                 // u32 patch_idle_loops;
-  SS_SNAPSHOT_OFF,   // u32 snapshot_format;
+  SS_SNAPSHOT_FULL,   // u32 snapshot_format;
   0,                 // u32 force_usa;
 
   300,               // u32 clock_speed; hurr mr pc is faster

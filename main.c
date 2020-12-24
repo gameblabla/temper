@@ -326,13 +326,13 @@ int main(int argc, char *argv[])
   
 	if (strstr(argv[1], ".bin") || strstr(argv[1], ".iso") )
 	{
-		return;
+		return 1;
 	}
 
     if(load_rom(argv[argc - 1]) == -1)
     {
       printf("Error: Could not load %s\n", argv[1]);
-      return -1;
+      return 1;
     }
     reset_pce();
   }

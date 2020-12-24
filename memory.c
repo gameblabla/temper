@@ -1407,7 +1407,6 @@ s32 load_rom(char *path)
       
     #ifdef CRC_CHECK
     result = Crc32_ComputeFile(rom_file, &crc32);
-    printf("crc32 0x%x\n", crc32);
     for (i=0;i<6;i++)
     {
 		if (crc32 == sgx_table[i])
