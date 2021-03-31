@@ -634,89 +634,91 @@ vce_struct vce;
 /* We might need an 8bpp renderer but most of Temper assumes a 16bpp buffer... */
 void initialize_palette_convert()
 {
-	/*FILE* fp;
+	/* Requires float support. As such, this may not be appropriate for low end hardware. (despite the increased filesize) */
+	#ifdef OLD_PALETTE_INACCURATE
 	s32 color, r, g, b;
 	s32 y, ry, by;
-	double f_y, f_ry, f_by;
-	double f_r, f_g, f_b;
-  
-  for(color = 0; color < 512; color++)
-  {
-	
-    g = ((color >> 6) & 0x7);
-    r = ((color >> 3) & 0x7);
-    b = (color & 0x7);
+	//double f_y, f_ry, f_by;
+	//double f_r, f_g, f_b;
+	float f_y, f_ry, f_by;
+	float f_r, f_g, f_b;
+	for(color = 0; color < 512; color++)
+	{
+		g = ((color >> 6) & 0x7);
+		r = ((color >> 3) & 0x7);
+		b = (color & 0x7);
 
-    y = (r * 133) + (g * 261) + (b * 49);
-    ry = (r * 214) + (g * -180) + (b * -34);
-    by = (r * -72) + (g * -142) + (b * 214);
+		y = (r * 133) + (g * 261) + (b * 49);
+		ry = (r * 214) + (g * -180) + (b * -34);
+		by = (r * -72) + (g * -142) + (b * 214);
 
-    y += 50;
+		y += 50;
 
-    if(ry < 0)
-      ry -= 50;
-    else
-      ry += 50;
+		if(ry < 0)
+		  ry -= 50;
+		else
+		  ry += 50;
 
-    if(by < 0)
-      by -= 50;
-    else
-      by += 50;
+		if(by < 0)
+		  by -= 50;
+		else
+		  by += 50;
 
-    y /= 100;
-    ry /= 100;
-    by /= 100;
+		y /= 100;
+		ry /= 100;
+		by /= 100;
 
-    f_y = y / 31.0;
-    f_ry = (ry / 15.0) * 0.701 * 0.75;
-    f_by = (by / 15.0) * 0.886 * 0.75;
+		f_y = y / 31.0f;
+		f_ry = (ry / 15.0f) * 0.701f * 0.75f;
+		f_by = (by / 15.0f) * 0.886f * 0.75f;
 
-    f_r = f_y + f_ry;
-    f_g = f_y - ((0.114 / 0.587) * f_by) - ((0.229 / 0.587) * f_ry);
-    f_b = f_y + f_by;
+		f_r = f_y + f_ry;
+		f_g = f_y - ((0.114f / 0.587f) * f_by) - ((0.229f / 0.587f) * f_ry);
+		f_b = f_y + f_by;
 
-    r = (u32)(floor(f_r * 31.0) + 0.5);
-    b = (u32)(floor(f_b * 31.0) + 0.5);
+		r = (u32)(floor(f_r * 31.0f) + 0.5f);
+		b = (u32)(floor(f_b * 31.0f) + 0.5f);
 
-    if(r < 0)
-      r = 0;
+		if(r < 0)
+		  r = 0;
 
-    if(b < 0)
-      b = 0;
+		if(b < 0)
+		  b = 0;
 
-    if(r > 31)
-      r = 31;
+		if(r > 31)
+		  r = 31;
 
-    if(b > 31)
-      b = 31;
+		if(b > 31)
+		  b = 31;
 
-#ifdef COLOR_RGB_555
-    g = (u32)(floor(f_g * 31.0) + 0.5);
+	#ifdef COLOR_RGB_555
+		g = (u32)(floor(f_g * 31.0f) + 0.5f);
 
-    if(g > 31)
-      g = 31;
-#else
-    g = (u32)(floor(f_g * 63.0) + 0.5);
+		if(g > 31)
+		  g = 31;
+	#else
+		g = (u32)(floor(f_g * 63.0f) + 0.5f);
 
-    if(g > 63)
-      g = 63;
-#endif
+		if(g > 63)
+		  g = 63;
+	#endif
 
-    if(g < 0)
-      g = 0;
+		if(g < 0)
+		  g = 0;
 
-#ifdef COLOR_BGR_565
-    palette_convert[color] = (b << 11) | (g << 5) | r;
-#endif
+	#ifdef COLOR_BGR_565
+		palette_convert[color] = (b << 11) | (g << 5) | r;
+	#endif
 
-#ifdef COLOR_RGB_565
-    palette_convert[color] = (r << 11) | (g << 5) | b;
-#endif
+	#ifdef COLOR_RGB_565
+		palette_convert[color] = (r << 11) | (g << 5) | b;
+	#endif
 
-#ifdef COLOR_RGB_555
-    palette_convert[color] = (r << 10) | (g << 5) | b;
-#endif
-  }*/
+	#ifdef COLOR_RGB_555
+		palette_convert[color] = (r << 10) | (g << 5) | b;
+	#endif
+	}
+  #endif
 }
 
 void vce_control_write(u32 value)
@@ -730,6 +732,24 @@ void vce_control_write(u32 value)
       vce.screen_width = 256;
       vce.screen_overdraw_offset = 32;
       vce.scanline_cycles = 1364;
+      /* HACK : TO FIX */
+      switch(vdc_a.hde)
+      {
+		case 0x4:
+		if (vdc_a.hdw == 0x1F)
+		{
+			vce.screen_overdraw_offset += 8;
+		}
+		break;
+		case 0x6:
+		if (vdc_a.hdw == 0x29)
+		{
+			vce.screen_overdraw_offset += 8;
+		}
+		break;
+		default:
+		break;
+	  }
       break;
 
     case 1:
@@ -755,7 +775,7 @@ void vce_control_write(u32 value)
         vce.scanline_cycles += 2;
       break;
   }
-
+  
 #ifdef IPU_SCALING
 	vce.screen_center_offset = 0;
 #else
@@ -766,10 +786,15 @@ void vce_control_write(u32 value)
 
   if(config.sgx_mode)
     vdc_update_width(&vdc_b);
-    
-	frame_counter_offset = vdc_a.vds + vdc_a.vsw;
+	
+	// This frame_counter_offset thing really doesn't work at all
 #ifdef IPU_SCALING
 	u32 height;
+	
+	frame_counter_offset = (vdc_a.vds + vdc_a.vsw);
+	// HACK
+	if (vdc_a.vds > 0x80) frame_counter_offset = 20;
+	
 	#ifdef CRC_CHECK
 	if (height_crop > 0)
 	{
@@ -795,9 +820,6 @@ void vce_control_write(u32 value)
 			break;
 		}
 	}
-	/*printf("vdc_a.vds 0x%x\n",  vdc_a.vds);
-	printf("vdc_a.vsw 0x%x\n",  vdc_a.vsw);
-	printf("frame_counter_offset %d\n",  frame_counter_offset);*/
 	set_screen_resolution(vce.screen_width, height, 1);
 #endif
 
@@ -833,7 +855,7 @@ u32 vce_data_read_high()
 
 void vce_data_write_low(u32 value)
 {
-  u32 palette_entry = vce.palette[vce.palette_offset];
+  u16 palette_entry = vce.palette[vce.palette_offset];
   palette_entry = (palette_entry & 0xFF00) | value;
 
   vce.palette[vce.palette_offset] = palette_entry;
@@ -867,7 +889,7 @@ void vce_data_write_low(u32 value)
 
 void vce_data_write_high(u32 value)
 {
-  u32 palette_entry = vce.palette[vce.palette_offset];
+  u16 palette_entry = vce.palette[vce.palette_offset];
   palette_entry = (palette_entry & 0xFF) | ((value & 0x1) << 8);
 
   vce.palette[vce.palette_offset] = palette_entry;

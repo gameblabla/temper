@@ -1,4 +1,6 @@
-u32 palette_convert[512] =
+u16 palette_convert[512]
+#ifndef OLD_PALETTE_INACCURATE
+ =
 {0,
 4,
 9,
@@ -511,4 +513,7 @@ u32 palette_convert[512] =
 65526,
 65531,
 65535
-};
+}
+#endif
+;
+
