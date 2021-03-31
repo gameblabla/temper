@@ -732,24 +732,6 @@ void vce_control_write(u32 value)
       vce.screen_width = 256;
       vce.screen_overdraw_offset = 32;
       vce.scanline_cycles = 1364;
-      /* HACK : TO FIX */
-      switch(vdc_a.hde)
-      {
-		case 0x4:
-		if (vdc_a.hdw == 0x1F)
-		{
-			vce.screen_overdraw_offset += 8;
-		}
-		break;
-		case 0x6:
-		if (vdc_a.hdw == 0x29)
-		{
-			vce.screen_overdraw_offset += 8;
-		}
-		break;
-		default:
-		break;
-	  }
       break;
 
     case 1:
