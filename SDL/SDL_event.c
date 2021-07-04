@@ -242,6 +242,9 @@ u32 update_input(event_input_struct *event_input)
         switch(event.key.keysym.sym)
         {
 			case SDLK_HOME:
+			#ifdef _RG99_
+			case SDLK_PAGEUP:
+			#endif
 				event_input->action_type = INPUT_ACTION_TYPE_PRESS;
 				event_input->config_button_action = CONFIG_BUTTON_MENU;
 				return 1;

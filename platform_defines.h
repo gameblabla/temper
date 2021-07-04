@@ -166,6 +166,29 @@
 
 #endif
 
+#ifdef RG99_BUILD
+
+#define SDL_INIT        (SDL_INIT_VIDEO | SDL_INIT_JOYSTICK)
+
+#define COLOR_RGB_565
+#define CRC_CHECK
+
+#define LINUX_PLATFORM
+#define LETSGO_HOME
+#define KEYBOARD_SUPPORT
+#define CONFIG_OPTIONS_GAMMA
+
+#define OGG_SUPPORT
+#define OGG_TREMOR
+//#define BZ_SUPPORT
+
+#define DIR_SEPARATOR_CHAR '/'
+#define DIR_SEPARATOR_CHAR_STR "/"
+#define MAX_PATH 512
+#define make_directory(name) mkdir(name, 0755)
+
+#endif
+
 #ifdef GCW_BUILD
 
 #define SDL_INIT        (SDL_INIT_VIDEO | SDL_INIT_JOYSTICK)
