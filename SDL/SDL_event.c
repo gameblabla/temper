@@ -90,6 +90,14 @@ u32 key_map(u32 keys)
 		case 18:
 			return CONFIG_BUTTON_MENU;
 		break;
+
+		case 19:
+			return CONFIG_BUTTON_SAVE_STATE;
+		break;
+
+		case 20:
+			return CONFIG_BUTTON_LOAD_STATE;
+		break;
 		
 		default:
 		  return CONFIG_BUTTON_NONE;
